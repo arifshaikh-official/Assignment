@@ -1,0 +1,582 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
+        name="viewport" />
+    <title>DocsAllOver&nbsp;|&nbsp;Technical Docs&nbsp;|&nbsp;Javascript</title>
+    <meta name="language" content="EN">
+    <meta name="coverage" content="Worldwide">
+    <meta name="distribution" content="Global">
+    <meta name="rating" content="General">
+    <meta name="robots" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    <meta name="author" content="Hrishikesh & Rakesh">
+    <meta name="subject" content="Get the most out of your experience with DocsAllOver by exploring our comprehensive documentation, including installation guides, integration guides, tutorials, blogs, articles, and FAQs">
+    <meta name="copyright" content="DocsAllOver">
+    <meta name="rating" content="General">
+    <meta name="revisit-after" content="2 days">
+
+    <link rel="canonical" href="index.html">
+
+    <meta property="fb:app_id" content="1330655607860200" />
+    <meta property="og:site_name" content="DocsAllOver">
+    <meta property="twitter:site" name="twitter:site" content="@docsallover">
+    <meta property="twitter:creator" name="twitter:creator" content="@docsallover">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9JVTKGBCBW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-9JVTKGBCBW');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6750041070411469"
+    crossorigin="anonymous"></script>
+    
+    <!-- Path to manifest.json -->
+<link rel="manifest" href="../../manifest.json">
+
+<!-- Add to homescreen for Chrome on Android -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="DocsAllOver">
+
+
+<!-- Chrome for Android theme color -->
+<meta name="theme-color" content="#5271ff">
+
+<!-- Add to homescreen for Safari on iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DocsAllOver">
+<meta name="apple-mobile-web-app-status-bar-style" content="#5271ff">
+
+
+    
+        <link rel="apple-touch-icon" href="http://127.0.0.1:8000/static/images/logo-square.png" sizes="">
+    
+
+
+
+
+<link href="http://127.0.0.1:8000/static/images/logo-square.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image"/>
+
+
+
+<!-- Tile for Win8 -->
+<meta name="msapplication-TileColor" content="#ffffff">
+
+<meta name="msapplication-TileImage" content="/static/images/logo-square.png">
+
+
+<link rel="icon" sizes="" href="http://127.0.0.1:8000/static/images/logo-square.png">
+
+
+<script type="text/javascript">
+    // Initialize the service worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/serviceworker.js', {
+            scope: '/'
+        }).then(function (registration) {
+            // Registration was successful
+            
+            console.log('django-pwa: ServiceWorker registration successful with scope: ', registration.scope);
+            
+        }, function (err) {
+            // registration failed :(
+            
+            console.log('django-pwa: ServiceWorker registration failed: ', err);
+            
+        });
+    }
+</script>
+
+    
+    
+<meta name="keywords" content="JavaScript, JS, Web development, Front-end development, Client-side scripting, Web programming, DOM, ECMAScript, Browser APIs, jQuery, Node.js, AngularJS, ReactJS, Vue.js, TypeScript">
+<meta name="keyphrases" content="JavaScript programming, JS basics, DOM manipulation, JS events, JS functions, JS objects, JS arrays, JS strings, JS numbers, JS loops, JS conditionals, JS operators, JS classes, ES6 features, JS modules, JS libraries, Browser compatibility, JS frameworks, JS testing, Debugging JS code">
+<meta property="og:title" content="DocsAllOver | Technical Docs | Javascript" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://docsallover.com/technical-docs/javascript/" />
+<meta name="description" property="og:description" content="Browse through our comprehensive technical documentation for JavaScript to enhance your coding skills and gain in-depth knowledge of this dynamic programming language.">
+
+<meta name="twitter:title" content="DocsAllOver | Technical Docs | Javascript">
+<meta name="twitter:description" content="Browse through our comprehensive technical documentation for JavaScript to enhance your coding skills and gain in-depth knowledge of this dynamic programming language.">
+<meta name="twitter:url" content="https://docsallover.com/technical-docs/javascript/" />
+<meta name="twitter:card" content="summary_large_image">
+
+    <style>
+        .ad::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+    
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+
+<link id="theme-style" rel="stylesheet" href="../../docsallover/static/core/css/theme.css">
+<link rel="stylesheet" href="../../docsallover/static/core/plugins/simplelightbox/simple-lightbox.min.css">
+<style>
+    ::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: #5271ff;
+        opacity: 1;
+        /* Firefox */
+    }
+
+    :-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: #5271ff;
+    }
+
+    ::-ms-input-placeholder {
+        /* Microsoft Edge */
+        color: #5271ff;
+    }
+
+    body {
+        background-color: #eee
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px
+    }
+
+    .c-details span {
+        font-weight: 300;
+        font-size: 13px
+    }
+
+    .icon {
+        width: 50px;
+        height: 50px;
+        background-color: #eee;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 39px
+    }
+
+    .badge span {
+        background-color: #dae1ff;
+        width: 60px;
+        height: 25px;
+        padding-bottom: 3px;
+        border-radius: 5px;
+        display: flex;
+        color: #5271ff;
+        justify-content: center;
+        align-items: center
+    }
+
+    .text1 {
+        font-size: 14px;
+        font-weight: 600
+    }
+
+    .text2 {
+        color: #a5aec0
+    }
+
+    .blog {
+        background-color: #eee !important;
+    }
+
+    @media (max-width: 992px) {
+        .offcanvas-collapse {
+            position: fixed;
+            top: 56px;
+            /* Height of navbar */
+            bottom: 0;
+            left: 100%;
+            width: 100%;
+            padding-right: 1rem;
+            padding-left: 1rem;
+            overflow-y: auto;
+            visibility: hidden;
+            background-color: #343a40;
+            transition: transform .3s ease-in-out, visibility .3s ease-in-out;
+        }
+
+        .offcanvas-collapse.open {
+            visibility: visible;
+            transform: translateX(-100%);
+        }
+
+    }
+    .text-truncated{
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+</style>
+
+
+
+
+<!-- Plugins CSS -->
+<link rel="stylesheet" href="../../docsallover/static/core/plugins/highlightjs/atom-one-dark.min.css">
+<style>
+	body {
+        background-color: #fff
+    }
+	.floating {
+		position: fixed;
+		width: 60px;
+		height: 60px;
+		bottom: 40px;
+		right: 40px;
+		background-color: #5271ff;
+		color: #fff;
+		border-radius: 50px;
+		text-align: center;
+		font-size: 30px;
+		box-shadow: 2px 2px 3px #999;
+		z-index: 100;
+	}
+
+	.fab-icon {
+		margin-top: 16px;
+	}
+
+	.theme-icon-holder svg {
+		margin-top: 3px;
+	}
+</style>
+
+
+
+</head>
+
+<body>
+    
+
+
+
+    <style>
+        @media all and (min-width: 992px) {
+	.navbar .nav-item .dropdown-menu{ display: none; }
+	.navbar .nav-item:hover .dropdown-menu{ display: block; }
+	.navbar .nav-item .dropdown-menu{ margin-top:0; }
+}
+    </style>
+
+    
+    
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light text-dark" aria-label="Main navigation">
+    <div class="container-fluid">
+        <a class="navbar-brand abs" href="../../index.html">
+            <div class="container-fluid">
+                <img class="img-fluid brand-img" src="../../docsallover/static/images/logo-landscape.png" alt="Docsallover - Where Knowledge Is Just A Click Away !">
+            </div>
+        </a>
+        <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse offcanvas-collapse bg-light" id="navbarsExampleDefault">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="../index.html">
+                        <b>
+                            <i class="fa fa-book-open-reader"></i> Technical Docs
+                        </b>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../faq/index.html">
+                        <b>
+                            <i class="fa fa-lightbulb"></i> FAQ's
+                        </b>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="../../snippets/index.html" > <b> <i class='fa fa-code'></i> Snippets</b> </a>
+                     <ul class="dropdown-menu">
+                        
+                       <li><a class="dropdown-item" href="../../snippets/bootstrap/index.html"> Bootstrap</a></li>
+                       
+                       <li><a class="dropdown-item" href="../../snippets/tailwind/index.html"> Tailwind</a></li>
+                       
+                     </ul>
+                 </li>
+                <!--
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <b>
+                        <i class="fa fa-file-code"></i> Guides</b>
+                </a>
+                <ul class="dropdown-menu bg-light" aria-labelledby="navbarDropdownMenuLink">
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="fa fa-arrow-down"></i> Installation Guides
+                        </a>
+                    </li>
+                    <li><a class="dropdown-item" href="#"><i class="fa fa-cogs"></i> Integration Guides</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <b><i class="fa fa-book"></i> Tutorials</b>
+                </a>
+                <ul class="dropdown-menu bg-light" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+            </li>
+            -->
+
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="../../tools/index.html" > <b> <i class='fa fa-tools'></i> Tools</b> </a>
+                     <ul class="dropdown-menu">
+                       <li><a class="dropdown-item" href="../../tools/formatter-tools/index.html"> Formatter Tools</a></li>
+                       <li><a class="dropdown-item" href="../../tools/minifier-tools/index.html"> Minifier Tools </a></li>
+                       <li><a class="dropdown-item" href="../../tools/encoder-decoder-tools/index.html"> Encoder/Decoder Tools </a></li>
+                       <li><a class="dropdown-item" href="../../tools/encrypt-decrypt-tools/index.html"> Encrypt/Decrypt Tools </a></li>
+                       <li><a class="dropdown-item" href="../../tools/code-generator-tools/index.html"> Code Generator Tools </a></li>
+                       <li><a class="dropdown-item" href="../../tools/image-tools/index.html"> Image Tools </a></li>
+                     </ul>
+                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="../../blog/index.html" > <b> <i class='fa fa-newspaper'></i> Blogs &amp; Articles</b> </a>
+                     <ul class="dropdown-menu">
+                        
+                        <li><a class="dropdown-item" href="../../blog/web-programming/index.html"> Web Programming</a></li>
+                        
+                        <li><a class="dropdown-item" href="../../blog/ui-ux/index.html"> UI &amp; UX</a></li>
+                        
+                        <li><a class="dropdown-item" href="../../blog/python-blogs/index.html"> Python</a></li>
+                        
+                     </ul>
+                 </li>
+                <!--
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/login/">
+                    <b>
+                        <i class="fas fa-sign-in"></i> Login
+                    </b>
+                </a>
+            </li>
+            
+            -->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<script>
+    (() => {
+        'use strict'
+
+        document.querySelector('#navbarSideCollapse').addEventListener('click', () => {
+            document.querySelector('.offcanvas-collapse').classList.toggle('open')
+        })
+    })()
+</script>
+
+
+
+<div class="docs-wrapper">
+	<div id="docs-sidebar" class="docs-sidebar">
+		<nav id="docs-nav" class="docs-nav navbar">
+			<ul class="section-items list-unstyled nav flex-column pb-3">
+				
+				<li class="nav-item section-title mt-3">
+					<a class="nav-link scrollto" href="index.html#section-1">
+						<span class="theme-icon-holder me-2">
+							
+							deee
+							
+						</span>
+						Introduction
+					</a>
+				</li>
+				
+				
+			</ul>
+
+		</nav>
+		<!--//docs-nav-->
+	</div>
+	<!--//docs-sidebar-->
+	<div class="docs-content">
+		<div class="container">
+			
+			<article class="docs-article" id="section-1">
+				<header class="docs-header">
+					<h1 class="docs-heading">Introduction <span class="docs-time">Last updated:
+							May 7, 2023, 10:58 a.m.</span></h1>
+					<section class="docs-intro">
+						
+						a
+						
+					</section>
+					<!--//docs-intro-->
+				</header>
+				
+			</article>
+			
+			
+
+
+
+			
+
+<div class="container-fluid cta-section theme-bg-dark position-relative">
+    <div class="theme-bg-shapes-right"></div>
+    <div class="theme-bg-shapes-left"></div>
+    <div class="container">
+        <div class="row gx-5">
+            <div class="col-lg-12 col-md-6">
+                <div class="row gx-5">
+                    <div class="col-lg-3 col-md-12 pt-5 mb-1">
+                        <a href="../../index.html" class="mb-2" style="text-decoration: none;">
+                            <h3 class="m-0 text-white text-decoration-none">DocsAllOver</h3>
+                        </a>
+                        <div class="d-flex mb-2">
+                            <p class="mt-3 text-white mb-4">Where knowledge is just a click away !
+                                DocsAllOver is a one-stop-shop for all your software programming needs, from beginner
+                                tutorials to advanced documentation</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-12 pt-5 mb-5">
+                        <div class="mb-3">
+                            <h3 class="text-light mb-0">Get In Touch</h3>
+                        </div>
+                        <div class="d-flex mb-2">
+                            <i class="bi bi-geo-alt text-primary me-2"></i>
+                            <p class="mb-0 text-white">We'd love to hear from you! Get in touch and let's collaborate on
+                                something great</p>
+                        </div>
+                        <div class="d-flex mt-4">
+                            <ul class="social-list list-unstyled  my-2">
+                                <li class="list-inline-item"><a href="https://github.com/docsallover/"><i
+                                            class="fab fa-github fa-fw" style="color:white;"></i></a></li>
+                                <li class="list-inline-item"><a href="https://twitter.com/docsallover/"><i
+                                            class="fab fa-twitter fa-fw" style="color:white;"></i></a></li>
+                                <li class="list-inline-item"><a href="https://www.linkedin.com/company/docsallover/"><i
+                                            class="fab fa-linkedin fa-fw" style="color:white;"></i></a></li>
+                                <li class="list-inline-item"><a href="https://facebook.com/docsallover/"><i
+                                            class="fab fa-facebook-f fa-fw" style="color:white;"></i></a></li>
+                                <li class="list-inline-item"><a href="https://www.instagram.com/docsallover.tech/"><i
+                                            class="fab fa-instagram fa-fw" style="color:white;"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-12 pt-0 pt-lg-5 mb-5">
+                        <div class="mb-2">
+                            <h3 class="text-light mb-0">Quick Links</h3>
+                        </div>
+                        <div class="link-animated d-flex flex-column justify-content-start">
+                            <a class="text-light mb-2 text-decoration-none" href="../../index.html"><i
+                                    class="fa fa-arrow-right me-2"></i>Home</a>
+                            <a class="text-light mb-2 text-decoration-none" href="../../search/index.html"><i
+                                    class="fa fa-arrow-right me-2"></i>Search</a>
+                            <a class="text-light mb-2 text-decoration-none" href="../../linkinbio/index.html"><i
+                                    class="fa fa-arrow-right me-2"></i>Link In Bio</a>
+                            <a class="text-light mb-2 text-decoration-none" href="../../privacy/index.html"><i
+                                    class="fa fa-arrow-right me-2"></i>Privacy Policy</a>
+                            
+
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-12 pt-0 pt-lg-5 mb-5">
+                        <div class="mb-2">
+                            <h3 class="text-light mb-0">Popular Links</h3>
+                        </div>
+                        <div class="link-animated d-flex flex-column justify-content-start">
+                            <a class="text-light mb-2 text-decoration-none" href="../index.html"><i
+                                    class="fa fa-arrow-right me-2"></i>Technical Docs</a>
+                            <a class="text-light mb-2 text-decoration-none" href="../../faq/index.html"><i
+                                    class="fa fa-arrow-right me-2"></i>FAQ's</a>
+                            <a class="text-light mb-2 text-decoration-none" href="../../tools/index.html"><i
+                                    class="fa fa-arrow-right me-2"></i>Tools</a>        
+                            <a class="text-light mb-2 text-decoration-none" href="../../blog/index.html"><i
+                                    class="fa fa-arrow-right me-2"></i>Blogs</a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid bg-light">
+    <div class="container text-center">
+        <div class="py-3">
+            <small class="copyright text-center mx-auto my-2" id="copyright">
+                Copyright <span class="sr-only">copyright</span>
+                &copy; <script>
+                    document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))
+                </script> <img style="max-height:20px;" src="../../docsallover/static/images/logo-landscape.png"
+                    alt="Docsallover - Your One Shop Stop For Documentation">
+            </small>
+        </div>
+    </div>
+</div>
+		</div>
+	</div>
+</div>
+<button id="docs-sidebar-toggler" class="floating docs-sidebar-toggler docs-sidebar-visible d-xl-none" type="button">
+	<i class="fa fa-bars"></i>
+</button>
+<!--//docs-wrapper-->
+
+
+
+
+    
+<!-- Javascript -->
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  
+<script src="../../docsallover/static/core/plugins/popper.min.js"></script>
+<script src="../../docsallover/static/core/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../docsallover/static/core/fontawesome/js/all.min.js"></script>
+<script src="../../docsallover/static/core/plugins/simplelightbox/simple-lightbox.min.js"></script>
+
+
+  
+<!-- Page Specific JS -->
+<script src="../../docsallover/static/core/plugins/smoothscroll.min.js"></script>
+<script src="../../docsallover/static/core/plugins/highlightjs/highlight.min.js"></script>
+<script src="../../docsallover/static/core/js/highlight-custom.js"></script>
+<script src="../../docsallover/static/core/plugins/gumshoe/gumshoe.polyfills.min.js"></script>
+<script src="../../docsallover/static/core/js/docs.js"></script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+    
+</body>
+
+</html>
