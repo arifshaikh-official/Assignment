@@ -806,7 +806,8 @@ ng build --configuration production
                             Angular template compiler to minify code, perform "Tree Shaking" (removing unused code), and
                             generate highly optimized bundles.
                         </p>
-                        <p>Warning: Never use <code>angular.js</code> (Angular 1.x) documentation for modern Angular (v2+). Modern
+                        <p>Warning: Never use <code>angular.js</code> (Angular 1.x) documentation for modern Angular
+                            (v2+). Modern
                             Angular is a complete rewrite and is not backward compatible with the original AngularJS
                             framework.</p>
 
@@ -1378,6 +1379,7 @@ ng build --configuration production
                     </section>
                 </article>
 
+
                 <article class="docs-article" id="section-2">
                     <header class="docs-header">
                         <p class="h2 docs-heading">Section 2: Components & Templates</p>
@@ -1385,35 +1387,1574 @@ ng build --configuration production
                     <hr>
                     <section class="docs-section" id="item-2-1">
                         <p class="h3">Standalone Components (The Modern Standard)</p>
-                        <p>Content goes here...</p>
+                        <p>Starting with Angular 14 and becoming the default in Angular 17, Standalone Components
+                            represent the modern architectural standard for Angular applications. Traditionally, every
+                            component had to belong to an <code>NgModule</code>, which acted as a container for
+                            declarations and
+                            dependencies. Standalone components eliminate this requirement by allowing components to
+                            manage their own dependencies directly. This "component-first" approach simplifies the
+                            mental model, reduces boilerplate, and makes the application more "tree-shakable," ensuring
+                            only necessary code is included in the final production bundle.
+                        </p>
+                        <p>A standalone component is defined by setting the <code>standalone: true</code> flag within
+                            the <code>@Component</code>
+                            decorator. Because it is no longer part of a module, the component must explicitly list any
+                            other components, directives, or pipes it uses in its own <code>imports</code> array. This
+                            makes the
+                            component a self-contained unit that is easier to move, test, and reuse across different
+                            parts of an application.
+                        </p>
+                        <p class="h5">Anatomy of a Standalone Component</p>
+                        <p>The structure of a standalone component integrates what used to be handled by
+                            <code>app.module.ts</code>
+                            directly into the component's metadata. This consolidation creates a clear, traceable link
+                            between the UI and its required logic.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+
+@Component({
+  selector: 'app-dashboard',
+  standalone: true,
+  imports: [
+    CommonModule,          // Provides standard directives like ngIf and ngFor
+    UserProfileComponent   // Importing another standalone component directly
+  ],
+  template: `
+    &lt;section class="dashboard"&gt;
+      &lt;h1&gt;User Dashboard&lt;/h1&gt;
+      &lt;app-user-profile [userId]="currentUserId"&gt;&lt;/app-user-profile&gt;
+      
+      @if (isLoggedIn) {
+        &lt;p&gt;Welcome back, Admin!&lt;/p&gt;
+      }
+    &lt;/section&gt;
+  `,
+  styles: [`
+    .dashboard { padding: 20px; background: #f4f4f4; }
+  `]
+})
+export class DashboardComponent {
+  currentUserId = 101;
+  isLoggedIn = true;
+}
+</code></pre>
+                        <p>In the example above, the <code>DashboardComponent</code> is entirely self-sufficient. It
+                            imports
+                            <code>CommonModule</code> to gain access to standard Angular features and specifically
+                            imports
+                            <code>UserProfileComponent</code> to use it within its template.
+                        </p>
+                        <p class="h5">Comparison: Standalone vs. Module-Based</p>
+                        <p>Transitioning to standalone components changes how dependencies are resolved and how the
+                            application starts up. The following table highlights the key differences in development
+                            workflow.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Feature</th>
+                                        <th scope="col">Standalone Components</th>
+                                        <th scope="col">NgModule-Based Components</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Declaration</th>
+                                        <td><code>standalone: true</code> in decorator.</td>
+                                        <td>Added to <code>declarations: []</code> in a module.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Dependency Management</th>
+                                        <td><code>imports: []</code> inside the component.</td>
+                                        <td><code>imports: []</code> inside the parent module.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Bootstrapping</th>
+                                        <td><code>bootstrapApplication(RootComponent)</code></td>
+                                        <td><code>platformBrowserDynamic().bootstrapModule(AppModule)</code></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Visibility</th>
+                                        <td>Public by default to anyone importing it.</td>
+                                        <td>Only visible to other components in the same module unless exported.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Lazy Loading</th>
+                                        <td>Load the component directly in routes.</td>
+                                        <td>Must load the module that contains the component.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>Even in a standalone application, you can still use existing libraries that are
+                                    module-based. You simply include the <code>NgModule</code> (like
+                                    <code>ReactiveFormsModule</code> or
+                                    <code>HttpClientModule</code>) in the <code>imports</code> array of your standalone
+                                    component.
+                                </p>
+                            </div>
+                        </div>
+                        <p class="h5">Bootstrapping a Standalone Application</p>
+                        <p>In a standalone-first project, the <code>main.ts</code> file undergoes a significant change.
+                            Instead of
+                            pointing to an <code>AppModule</code>, it initializes the application by pointing directly
+                            to the root
+                            component. This process often includes the <code>provideRouter</code> and
+                            <code>provideHttpClient</code> functions to
+                            set up global services that were previously configured in modules.
+                        </p>
+                        <pre><code class="language-javascript">
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { AppComponent } from './app/app.component';
+import { routes } from './app/app.routes';
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(routes) // Global routing configuration
+  ]
+}).catch(err =&gt; console.error(err));
+</code></pre>
+                        <p class="h5">Dependency Resolution and Edge Cases</p>
+                        <p>When using standalone components, Angular uses a hierarchical injector system similar to the
+                            one used with modules. However, because components are imported directly, the "compilation
+                            context" is more localized. One edge case involves Circular Dependencies: if Component A
+                            imports Component B, and Component B imports Component A, the compiler will throw an error.
+                            This is usually a sign that common logic should be extracted into a shared Service or a
+                            third, shared Standalone Component.
+                        </p>
+                        <p>
+                            Warning: Do not mix <code>standalone: true</code> with the <code>declarations</code> array
+                            of an <code>NgModule</code>. A standalone component cannot be "declared" in a module; it can
+                            only be "imported" by a module or another standalone component. Attempting to declare a
+                            standalone component will result in
+                            a template compiler error.
+                        </p>
+
                     </section>
                     <section class="docs-section" id="item-2-2">
                         <p class="h3">Component Lifecycle</p>
-                        <p>Content goes here...</p>
+                        <p>An Angular component has a lifecycle managed by the framework, which starts when Angular
+                            instantiates the component class and renders the component view along with its child views.
+                            The lifecycle continues as Angular checks when data-bound properties change and eventually
+                            ends when Angular destroys the component instance and removes its rendered template from the
+                            DOM.
+                        </p>
+                        <p>To tap into these key moments, Angular provides Lifecycle Hooks. These are specific
+                            interfaces that, when implemented by a component class, allow you to execute logic at
+                            precise intervals. Understanding these hooks is vital for tasks such as fetching data from a
+                            server, initializing third-party libraries, or cleaning up resources to prevent memory
+                            leaks.
+                        </p>
+                        <p class="h5">The Lifecycle Sequence</p>
+                        <p>Angular executes lifecycle hooks in a specific order. They are divided into those that run
+                            during the initial check and those that run during every subsequent change detection cycle.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Hook</th>
+                                        <th scope="col">Timing</th>
+                                        <th scope="col">Use Case</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>ngOnChanges</strong></td>
+                                        <td>Before <code>ngOnInit</code> and when an <code>@Input</code> property
+                                            changes.</td>
+                                        <td>Acting upon changes to input data from a parent.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>ngOnInit</strong></td>
+                                        <td>Once, after the first <code>ngOnChanges</code>.</td>
+                                        <td>Initializing data or fetching from services.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>ngDoCheck</strong></td>
+                                        <td>During every change detection run.</td>
+                                        <td>Custom change detection for complex logic.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>ngAfterViewInit</strong></td>
+                                        <td>Once, after the component's view is initialized.</td>
+                                        <td>Accessing DOM elements via <code>@ViewChild</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>ngOnDestroy</strong></td>
+                                        <td>Just before the component is destroyed.</td>
+                                        <td>Unsubscribing from Observables or clearing timers.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Implementing Lifecycle Hooks</p>
+                        <p>To use a lifecycle hook, you must import the interface from <code>@angular/core</code> and
+                            implement the corresponding method within your class. While not strictly required by the
+                            compiler for the logic to work, implementing the interface is a best practice for TypeScript
+                            type safety.
+                        </p>
+                        <pre><code class="language-javascript">
+import { 
+  Component, 
+  OnInit, 
+  OnChanges, 
+  OnDestroy, 
+  SimpleChanges, 
+  Input 
+} from '@angular/core';
+import { Subscription, interval } from 'rxjs';
+
+@Component({
+  selector: 'app-lifecycle-demo',
+  standalone: true,
+  template: `
+    &lt;div class="box"&gt;
+      &lt;h3&gt;Counter: {{ count }}&lt;/h3&gt;
+      &lt;p&gt;External ID: {{ externalId }}&lt;/p&gt;
+    &lt;/div&gt;
+  `
+})
+export class LifecycleDemoComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() externalId!: string;
+  count = 0;
+  private timerSubscription?: Subscription;
+
+  constructor() {
+    // 1. Constructor: Logic here should be minimal. 
+    // Inputs are NOT yet available.
+    console.log('Constructor: Component instance created.');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // 2. ngOnChanges: Triggered when @Input properties change.
+    if (changes['externalId']) {
+      console.log('ID changed from:', changes['externalId'].previousValue);
+    }
+  }
+
+  ngOnInit() {
+    // 3. ngOnInit: Triggered once. Inputs are now available.
+    console.log('ngOnInit: Component initialized.');
+    this.timerSubscription = interval(1000).subscribe(() =&gt; this.count++);
+  }
+
+  ngOnDestroy() {
+    // 4. ngOnDestroy: Cleanup to prevent memory leaks.
+    console.log('ngOnDestroy: Cleaning up resources.');
+    this.timerSubscription?.unsubscribe();
+  }
+}
+</code></pre>
+                        <p class="h5">Deep Dive: ngOnChanges vs. ngOnInit</p>
+                        <p>One of the most common points of confusion is when to use <code>ngOnChanges</code> versus
+                            <code>ngOnInit</code>. The
+                            <code>ngOnChanges</code> hook is the only hook that receives an argument: the
+                            <code>SimpleChanges</code> object. This
+                            object contains the current and previous values of every <code>@Input</code> property.
+                        </p>
+                        <p>If your component logic depends on data being passed in from a parent component, and that
+                            data might change over time, you must use <code>ngOnChanges</code>. If you only need to run
+                            a task once
+                            when the component is first loaded (like a single API call), <code>ngOnInit</code> is the
+                            appropriate
+                            choice.
+                        </p>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>The <code>constructor</code> is a standard TypeScript feature and is called before
+                                    Angular begins
+                                    its lifecycle. You should avoid putting complex logic in the constructor. Use
+                                    <code>ngOnInit</code> for any initialization that requires Angular-specific features
+                                    like Inputs
+                                    or Services.
+                                </p>
+                            </div>
+                        </div>
+                        <p class="h5">View Initialization Hooks</p>
+                        <p>In addition to data-related hooks, Angular provides hooks for when the UI is fully rendered.
+                            <code>ngAfterViewInit</code> is particularly important when you need to interact with the
+                            DOM or child
+                            components using <code>@ViewChild</code>.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">View Hook</th>
+                                        <th scope="col">Execution</th>
+                                        <th scope="col">Primary Limitation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><code>ngAfterContentInit</code></th>
+                                        <td>After external content is projected into the component.</td>
+                                        <td>Only for <code>&lt;ng-content&gt;</code> scenarios.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>ngAfterViewInit</code></th>
+                                        <td>After the component's template and child views are ready.</td>
+                                        <td>Modifying data here may trigger
+                                            "ExpressionChangedAfterItHasBeenCheckedError".</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <pre><code class="language-javascript>">
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+
+@Component({
+  selector: 'app-dom-ref',
+  standalone: true,
+  template: `&lt;input #myInput type="text"&gt;`
+})
+export class DomRefComponent implements AfterViewInit {
+  @ViewChild('myInput') inputElement!: ElementRef;
+
+  ngAfterViewInit() {
+    // You cannot access inputElement safely in ngOnInit 
+    // because the view isn't rendered yet.
+    this.inputElement.nativeElement.focus();
+  }
+}
+</code></pre>
+                        <p>Warning: Always unsubscribe from long-lived Observables (like those from
+                            <code>interval</code> or custom
+                            <code>Subject</code> instances) in the <code>ngOnDestroy</code> hook. Failing to do so can
+                            cause memory leaks, as the
+                            subscription will continue to live even after the component is removed from the DOM.
+                        </p>
+
                     </section>
                     <section class="docs-section" id="item-2-3">
                         <p class="h3">Template Syntax (Interpolation, Property Binding)</p>
-                        <p>Content goes here...</p>
+                        <p>In Angular, the template is the blueprint for the user interface. Template syntax allows you
+                            to coordinate between the logic in your TypeScript class and the presentation in your HTML.
+                            Rather than manually manipulating the DOM to update values, you use declarative bindings.
+                            This means you describe the relationship between your data and the UI, and Angular
+                            automatically handles the updates when the data state changes.
+                        </p>
+                        <p>The two most fundamental ways to move data from your component logic to the view are
+                            Interpolation and Property Binding. While they often achieve similar visual results, they
+                            serve different technical purposes and have distinct syntax rules.
+                        </p>
+                        <p class="h5">Text Interpolation</p>
+                        <p>Interpolation refers to embedding expressions into marked-up text. By default, interpolation
+                            uses the double curly braces {{ and }} as delimiters. Angular replaces the expression within
+                            the braces with the string value of the corresponding component property.
+                        </p>
+                        <p>Angular evaluates the expression within the braces, converts the result to a string, and
+                            integrates it into the HTML. It is important to note that interpolation is for content, not
+                            for HTML attributes that require non-string data types.
+                        </p>
+
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-interpolation-demo',
+  standalone: true,
+  template: `
+    &lt;div class="card"&gt;
+      &lt;h2&gt;User: {{ username }}&lt;/h2&gt;
+      &lt;p&gt;Account Balance: {{ balance * conversionRate | currency }}&lt;/p&gt;
+      &lt;p&gt;Status: {{ getStatusMessage() }}&lt;/p&gt;
+    &lt;/div&gt;
+  `
+})
+export class InterpolationComponent {
+  username = 'Alice';
+  balance = 150.50;
+  conversionRate = 0.92;
+
+  getStatusMessage() {
+    return this.balance &gt; 0 ? 'Active' : 'Pending';
+  }
+}
+</code></pre>
+                        <p class="h5">Property Binding</p>
+                        <p>Property binding allows you to set the property of an element or directive to the value of a
+                            template expression. Unlike interpolation, which is always converted to a string, property
+                            binding can pass any data type (objects, booleans, or arrays) to the target property. The
+                            syntax involves wrapping the target property name in square brackets <code>[]</code>.
+                        </p>
+                        <p>Property binding is essential when you want to control the state of an element, such as
+                            disabling a button, setting a source for an image, or passing data into a child component's
+                            <code>@Input</code>.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-property-binding',
+  standalone: true,
+  template: `
+    &lt;button [disabled]="isFormInvalid"&gt;Submit&lt;/button&gt;
+
+    &lt;img [src]="profileImageUrl" [alt]="username + ' profile picture'"&gt;
+
+    &lt;div [class.active-row]="isActive"&gt;Row Data&lt;/div&gt;
+  `
+})
+export class PropertyBindingComponent {
+  isFormInvalid = true;
+  profileImageUrl = 'assets/images/user-01.png';
+  username = 'Alice';
+  isActive = false;
+}
+</code></pre>
+                        <p class="h5">Technical Comparison</p>
+                        <p>Choosing between interpolation and property binding often depends on whether you are
+                            modifying the text content inside an element or an attribute/property of the element itself.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Feature</th>
+                                        <th scope="col">Interpolation</th>
+                                        <th scope="col">Property Binding</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Syntax</th>
+                                        <td><code>{{ expression }}</code></td>
+                                        <td><code>[target]="expression"</code></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Target</th>
+                                        <td>Element content (text).</td>
+                                        <td>Element properties, component inputs, or attribute directives.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Data Type</th>
+                                        <td>Always converted to a <code>string</code>.</td>
+                                        <td>Preserves original data types (boolean, object, etc.).</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Use Case</th>
+                                        <td>Displaying dynamic text in headings or paragraphs.</td>
+                                        <td>Controlling logic (e.g., <code>disabled</code>, <code>hidden</code>) or
+                                            passing data objects.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Security and Sanitization</p>
+                        <p>Angular provides built-in protections against malicious attacks. For both interpolation and
+                            property binding, Angular sanitizes the values before rendering them. This prevents
+                            Cross-Site Scripting (XSS) by neutralizing potentially dangerous HTML or script tags.
+                        </p>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>Angular does not support script tags in templates. Any <code>&lt;script&gt;</code>
+                                    tag included in
+                                    an interpolation or property binding will be ignored or stripped for security
+                                    reasons. If you must render trusted HTML, you must use the <code>[innerHTML]</code>
+                                    property
+                                    binding and explicitly trust the value using Angular's <code>DomSanitizer</code>
+                                    service.</p>
+                            </div>
+                        </div>
+                        <p class="h5">Common Pitfalls and Edge Cases</p>
+                        <p>When using property binding, it is a common mistake to confuse attributes with properties. An
+                            attribute is defined by the HTML, while a property is defined by the DOM. Angular binding
+                            works almost exclusively with DOM properties.
+                        </p>
+                        <ul>
+                            <li>Attribute Binding: Used for items that do not have a corresponding DOM property, such as
+                                <code>colspan</code> or <code>aria</code> labels. Use the syntax
+                                <code>[attr.name]</code>.
+                            </li>
+                            <li>Class and Style Binding: Specialized versions of property binding for manipulating CSS.
+                                Use <code>[class.name]</code> or <code>[style.width]</code>.
+                            </li>
+                        </ul>
+                        <pre><code class="language-javascript">
+@Component({
+  selector: 'app-special-bindings',
+  standalone: true,
+  template: `
+    &lt;td [attr.colspan]="1 + 1"&gt;Two Columns&lt;/td&gt;
+
+    &lt;div [style.color]="isError ? 'red' : 'green'"&gt;Status Message&lt;/div&gt;
+  `
+})
+export class SpecialBindingsComponent {
+  isError = true;
+}
+</code></pre>
+                        <p>Warning: Avoid side effects in your template expressions. A template expression should not
+                            change the state of the application; it should only return a value. For example, calling a
+                            function that increments a counter inside <code>{{ }}</code> will lead to unstable change
+                            detection and
+                            performance issues.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-2-4">
                         <p class="h3">Control Flow (@if, @for, @switch)</p>
-                        <p>Content goes here...</p>
+                        <p>In modern Angular (v17+), the framework introduced a new, built-in Block Control Flow syntax.
+                            This syntax replaces the legacy structural directives (<code>*ngIf</code>,
+                            <code>*ngFor</code>, and <code>*ngSwitch</code>) with a
+                            more performant, readable, and developer-friendly approach. Built directly into the Angular
+                            compiler, this new syntax reduces the need for importing <code>CommonModule</code> and
+                            offers
+                            significantly better type-checking within your templates.
+                        </p>
+                        <p>The new control flow uses a "at-symbol" (<code>@</code>) prefix followed by the control
+                            keyword. This
+                            allows for a clean separation between standard HTML attributes and logical control
+                            structures, making the code resemble standard JavaScript or TypeScript logic more closely.
+                        </p>
+                        <p class="h5">Conditional Logic with @if</p>
+                        <p>The <code>@if</code> block allows you to conditionally render a portion of the UI. Unlike the
+                            older <code>*ngIf</code>,
+                            the new syntax supports <code>@else if</code> and <code>@else</code> blocks natively without
+                            the need for complex
+                            <code>ng-template</code> references.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-auth-display',
+  standalone: true,
+  template: `
+    &lt;div class="auth-container"&gt;
+      @if (userStatus === 'admin') {
+        &lt;p&gt;Welcome, Administrator. Access granted to all systems.&lt;/p&gt;
+        &lt;button&gt;Open Dashboard&lt;/button&gt;
+      } @else if (userStatus === 'user') {
+        &lt;p&gt;Welcome back, user! Check your profile.&lt;/p&gt;
+      } @else {
+        &lt;p&gt;Access Denied. Please log in.&lt;/p&gt;
+        &lt;button (click)="login()"&gt;Login&lt;/button&gt;
+      }
+    &lt;/div&gt;
+  `
+})
+export class AuthDisplayComponent {
+  userStatus: 'admin' | 'user' | 'guest' = 'guest';
+
+  login() {
+    this.userStatus = 'user';
+  }
+}
+</code></pre>
+                        <p class="h5">Iteration with @for</p>
+                        <p>The <code>@for</code> block is used to render a list of items. A significant improvement in
+                            the new syntax
+                            is the mandatory <code>track</code> expression. Tracking improves rendering performance by
+                            helping
+                            Angular identify which items in a collection have changed, been added, or removed.
+                        </p>
+                        <p>Additionally, the <code>@for</code> block includes a built-in <code>@empty</code> block,
+                            which displays content
+                            automatically when the collection being iterated is empty or null, eliminating the need for
+                            a separate <code>@if</code> check.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Property</th>
+                                        <th scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><code>track</code></th>
+                                        <td><strong>(Mandatory)</strong> A unique identifier for each item (e.g.,
+                                            <code>item.id</code>).
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>$index</code></th>
+                                        <td>The index of the current row in the collection.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>$count</code></th>
+                                        <td>The total number of items in the collection.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>$first / $last</code></th>
+                                        <td>Booleans indicating if the item is the first or last in the list.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>$even / $odd</code></th>
+                                        <td>Booleans indicating the parity of the current index.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-product-list',
+  standalone: true,
+  template: `
+    &lt;ul&gt;
+      @for (product of products; track product.id; let i = $index) {
+        &lt;li&gt;
+          {{ i + 1 }}. {{ product.name }} - {{ product.price | currency }}
+          @if ($first) { &lt;span class="badge"&gt;Newest!&lt;/span&gt; }
+        &lt;/li&gt;
+      } @empty {
+        &lt;li&gt;No products available at this time.&lt;/li&gt;
+      }
+    &lt;/ul&gt;
+  `
+})
+export class ProductListComponent {
+  products = [
+    { id: 101, name: 'Laptop', price: 1200 },
+    { id: 102, name: 'Mouse', price: 25 },
+    { id: 103, name: 'Keyboard', price: 75 }
+  ];
+}
+</code></pre>
+                        <p class="h5">Selection with @switch</p>
+                        <p>The <code>@switch</code> block allows for conditional rendering based on multiple possible
+                            values of an
+                            expression. It functions almost exactly like a JavaScript <code>switch</code> statement. It
+                            matches the
+                            value of the expression to the corresponding <code>@case</code> block. If no matches are
+                            found, the
+                            <code>@default</code> block is rendered.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-status-stepper',
+  standalone: true,
+  template: `
+    &lt;div [class]="status"&gt;
+      @switch (status) {
+        @case ('pending') { &lt;span&gt;Order is awaiting confirmation.&lt;/span&gt; }
+        @case ('shipped') { &lt;span&gt;Order is on the way!&lt;/span&gt; }
+        @case ('delivered') { &lt;span&gt;Order arrived successfully.&lt;/span&gt; }
+        @default { &lt;span&gt;Status unknown. Contact support.&lt;/span&gt; }
+      }
+    &lt;/div&gt;
+  `
+})
+export class StatusStepperComponent {
+  status: string = 'shipped';
+}
+</code></pre>
+                        <p class="h5">Technical Comparison: New Syntax vs. Legacy Directives</p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Feature</th>
+                                        <th scope="col">New Block Syntax ( <code>@if</code>, <code>@for</code> )</th>
+                                        <th scope="col">Legacy Directives ( <code>*ngIf</code>, <code>*ngFor</code> )
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Performance</th>
+                                        <td>Faster; built into the compiler.</td>
+                                        <td>Slower; involves directive overhead.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Imports</th>
+                                        <td>Automatically available in standalone.</td>
+                                        <td>Requires importing <code>CommonModule</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Syntax</th>
+                                        <td>Concise; supports <code>@else</code>, <code>@empty</code>.</td>
+                                        <td>Verbose; requires <code>&lt;ng-template&gt;</code> for else.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Type Safety</th>
+                                        <td>Enhanced type narrowing within blocks.</td>
+                                        <td>Limited type inference in complex cases.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p> The <code>track</code> property in <code>@for</code> is no longer optional. While
+                                    you can use the item itself
+                                    (<code>track $index</code> or <code>track item</code>), it is a best practice to use
+                                    a unique ID from your
+                                    data to ensure Angular can efficiently re-use DOM nodes during updates.</p>
+                            </div>
+                        </div>
+                        <p class="h5">Migration and Edge Cases</p>
+                        <p>If you are working on an older Angular project and wish to upgrade to the new control flow,
+                            the Angular CLI provides an automated migration tool.
+                        </p>
+                        <pre><code class="language-bash">
+# Run this command to migrate your project to the new control flow syntax
+ng generate @angular/core:control-flow
+</code></pre>
+                        <p class="h5">Edge Case: Null/Undefined Collections</p>
+                        <p>In the legacy <code>*ngFor</code>, passing a null value would simply render nothing. In the
+                            new <code>@for</code>, if
+                            the collection is null or undefined, the <code>@empty</code> block will be triggered. This
+                            behavior
+                            ensures that your UI always has a defined state even when data is missing.
+                        </p>
+                        <p>Warning: Do not attempt to use the legacy <code>*ngIf</code> and the new <code>@if</code> on
+                            the same HTML element.
+                            While the compiler may allow the application to run, it creates confusing logic paths and
+                            can lead to unexpected UI "flickering" during change detection cycles.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-2-5">
                         <p class="h3">Event Binding & Output</p>
-                        <p>Content goes here...</p>
+                        <p>Communication in Angular follows a unidirectional data flow: data flows down from parents to
+                            children via Property Binding, and notifications flow up from children to parents via Event
+                            Binding. Event binding allows an application to respond to user input, such as keystrokes,
+                            mouse clicks, or touch gestures. When a component needs to communicate a state change or an
+                            action to its parent, it utilizes the <code>@Output</code> decorator combined with the
+                            <code>EventEmitter</code>
+                            class.
+                        </p>
+                        <p>This mechanism ensures that components remain encapsulated and decoupled. A child component
+                            does not need to know which parent is listening to its events; it simply "emits" a signal,
+                            and any interested parent can "bind" to that signal to execute logic.</p>
+                        <p class="h5">Standard Event Binding</p>
+                        <p>Standard event binding captures events from the DOM. The syntax consists of a target event
+                            name within parentheses <code>()</code> on the left, and a template statement within quotes
+                            on the right.
+                            When the event occurs, Angular executes the statement.</p>
+                        <p>To access the data associated with a DOM event (such as the value of an input field), Angular
+                            provides a special <code>$event</code> object. This object contains the payload of the
+                            event, such as the
+                            <code>KeyboardEvent</code>or <code>MouseEvent</code> properties.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-click-logger',
+  standalone: true,
+  template: `
+    &lt;div class="container"&gt;
+      &lt;button (click)="onSave()"&gt;Save Data&lt;/button&gt;
+
+      &lt;input (input)="onInputChange($event)" placeholder="Type something..." /&gt;
+      
+      &lt;p&gt;Current Input: {{ currentVal }}&lt;/p&gt;
+    &lt;/div&gt;
+  `
+})
+export class ClickLoggerComponent {
+  currentVal = '';
+
+  onSave() {
+    console.log('Save button clicked!');
+  }
+
+  onInputChange(event: Event) {
+    // Explicit casting is required for TypeScript type safety
+    const inputElement = event.target as HTMLInputElement;
+    this.currentVal = inputElement.value;
+  }
+}
+</code></pre>
+                        <p class="h5">Component Communication with @Output</p>
+                        <p>When creating reusable components, you often need to emit custom events. To do this, you
+                            define a property in the child component class, decorate it with <code>@Output()</code>, and
+                            initialize
+                            it as a new <code>EventEmitter</code>. The parent component then uses the same parenthesis
+                            syntax to
+                            listen for that custom event.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Member</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>@Output()</strong></td>
+                                        <td>Decorator</td>
+                                        <td>Marks a class property as an event gateway for parent components.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>EventEmitter</strong></td>
+                                        <td>Class</td>
+                                        <td>A specialized class used to emit custom values synchronously or
+                                            asynchronously.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>.emit()</strong></td>
+                                        <td>Method</td>
+                                        <td>The function called to broadcast the event payload to listeners.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Example: Child to Parent Communication</p>
+                        <p>In this scenario, the <code>ItemDetailComponent</code> (child) notifies the
+                            <code>StoreComponent</code> (parent) that a product has been added to the cart.
+                        </p>
+                        <p class="h5">Child Component:</p>
+                        <pre><code class="language-javascript">
+import { Component, Output, EventEmitter, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-item-detail',
+  standalone: true,
+  template: `
+    &lt;div class="item"&gt;
+      &lt;span&gt;{{ itemName }}&lt;/span&gt;
+      &lt;button (click)="addToCart()"&gt;Add to Cart&lt;/button&gt;
+    &lt;/div&gt;
+  `
+})
+export class ItemDetailComponent {
+  @Input() itemName = '';
+  @Output() itemAdded = new EventEmitter&lt;string&gt;();
+
+  addToCart() {
+    // Emitting the name of the item back to the parent
+    this.itemAdded.emit(this.itemName);
+  }
+}
+</code></pre>
+                        <p class="h5">Parent Component Template:</p>
+                        <pre><code class="language-html">
+&lt;app-item-detail 
+  [itemName]="'Wireless Mouse'" 
+  (itemAdded)="handleItem($event)"&gt;
+&lt;/app-item-detail&gt;
+</code></pre>
+                        <p class="h5">Event Options and Modifiers</p>
+                        <p>Angular provides ways to optimize event handling, particularly when dealing with event
+                            bubbling or default browser behaviors. While Angular doesn't have "modifiers" in the
+                            template syntax like Vue (e.g., <code>.prevent</code>), you handle these logic requirements
+                            within the
+                            TypeScript method.</p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Scenario</th>
+                                        <th scope="col">Strategy</th>
+                                        <th scope="col">Code Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Prevent Reload</th>
+                                        <td>Call <code>preventDefault()</code> on the event.</td>
+                                        <td><code>event.preventDefault();</code></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Stop Propagation</th>
+                                        <td>Call <code>stopPropagation()</code> to stop bubbling.</td>
+                                        <td><code>event.stopPropagation();</code></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Passive Events</th>
+                                        <td>Handled via <code>zone.js</code> or global listeners.</td>
+                                        <td>Optimized for scrolling performance.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>For modern Angular (v16+), you can also use Signals for state management, but
+                                    <code>@Output</code> remains the standard for emitting discrete actions or
+                                    notifications from a component to its parent.
+                                </p>
+                            </div>
+                        </div>
+                        <p class="h5">Best Practices for Outputs</p>
+                        <ol>
+                            <li>Naming Conventions: Do not prefix your output names with "on" (e.g., use
+                                <code>changed</code> rather
+                                than <code>onChanged</code>). The event binding syntax <code>(changed)</code> already
+                                implies "on."
+                            </li>
+                            <li>Explicit Typing: Always provide a generic type to your <code>EventEmitter</code>, such
+                                as <code>new</code>
+                                <code>EventEmitter&lt;number&gt;()</code>, to ensure type safety in the parent's
+                                handler.
+                            </li>
+                            <li>Cleanup: <code>EventEmitter</code> is an implementation of an Observable, but Angular
+                                handles the
+                                unsubscription automatically for these template bindings, so manual cleanup in
+                                <code>ngOnDestroy</code> is usually unnecessary for <code>@Output</code>.
+                            </li>
+                        </ol>
+                        <p>Warning: Avoid emitting events in the <code>ngOnChanges</code> or <code>ngOnInit</code>
+                            lifecycle hooks of the same
+                            component. Emitting an event during the initialization phase can lead to
+                            "ExpressionChangedAfterItHasBeenCheckedError" because it might trigger a state change in the
+                            parent while the parent is still in the middle of its own rendering cycle.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-2-6">
                         <p class="h3">Two-Way Binding ([(ngModel)])</p>
-                        <p>Content goes here...</p>
+                        <p>Two-way data binding provides a synchronization mechanism that allows data to flow in both
+                            directions: from the component class to the template, and from the template back to the
+                            component class. This is most commonly used in data-entry forms where you want the UI (an
+                            input field) to reflect a value from your model, and you simultaneously want the model to
+                            update immediately when the user changes the input.
+                        </p>
+                        <p>In Angular, this is achieved using the "Banana-in-a-Box" syntax: <code>[(ngModel)]</code>.
+                            This syntax is
+                            a shorthand combination of Property Binding <code>[]</code> (data to the view) and Event
+                            Binding <code>()</code> (data
+                            from the view).
+                        </p>
+                        <p class="h5">Enabling Two-Way Binding</p>
+                        <p>The <code>ngModel</code> directive is not part of the Angular core package. It belongs to the
+                            <code>FormsModule</code>.
+                            In a standalone component, you must explicitly import <code>FormsModule</code> into the
+                            <code>imports</code> array of
+                            the <code>@Component</code> decorator to use this syntax.
+                        </p>
+                        <p>Once imported, <code>ngModel</code> handles the heavy lifting: it listens for input events,
+                            updates the
+                            class property, and pushes the property value back into the input element's property.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms'; // Required for ngModel
+
+@Component({
+  selector: 'app-user-settings',
+  standalone: true,
+  imports: [FormsModule],
+  template: `
+    &lt;div class="settings-form"&gt;
+      &lt;h3&gt;Edit Profile&lt;/h3&gt;
+      
+      &lt;label&gt;Username:&lt;/label&gt;
+      &lt;input [(ngModel)]="username" placeholder="Enter username" /&gt;
+
+      &lt;label&gt;Bio:&lt;/label&gt;
+      &lt;textarea [(ngModel)]="bio"&gt;&lt;/textarea&gt;
+
+      &lt;div class="preview"&gt;
+        &lt;h4&gt;Preview:&lt;/h4&gt;
+        &lt;p&gt;&lt;strong&gt;Name:&lt;/strong&gt; {{ username }}&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;Bio:&lt;/strong&gt; {{ bio }}&lt;/p&gt;
+      &lt;/div&gt;
+      
+      &lt;button (click)="resetForm()"&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+  `,
+  styles: [`
+    .settings-form { display: flex; flex-direction: column; gap: 10px; max-width: 300px; }
+    .preview { margin-top: 20px; padding: 10px; border: 1px dashed #ccc; }
+  `]
+})
+export class UserSettingsComponent {
+  username: string = 'Developer_One';
+  bio: string = 'Building the future with Angular.';
+
+  resetForm() {
+    this.username = '';
+    this.bio = '';
+  }
+}
+                    </code></pre>
+                        <p class="h5">Deconstructing the Syntax</p>
+                        <p>The <code>[(ngModel)]</code> syntax is actually a syntactic sugar for a longer form.
+                            Understanding this deconstruction is helpful when you need to perform additional logic (like
+                            validation or formatting) during the update process rather than just a direct assignment.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Syntax</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>[ngModel]</code></td>
+                                        <td>Property Binding</td>
+                                        <td>Sets the value of the input element to the property value.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>(ngModelChange)</code></td>
+                                        <td>Event Binding</td>
+                                        <td>Listens for changes and updates the property in the class.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>[(ngModel)]</code></td>
+                                        <td>Two-way Binding</td>
+                                        <td>Combines both for automatic synchronization.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">The Expanded Version:</p>
+                        <pre><code class="language-html">
+&lt;input [ngModel]="username" (ngModelChange)="username = $event"&gt;
+</code></pre>
+                        <p class="h5">Usage with Different Form Elements</p>
+                        <p>The <code>ngModel</code> directive is versatile and adapts its behavior based on the type of
+                            HTML element it is applied to.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Element</th>
+                                        <th scope="col">Event Listened To</th>
+                                        <th scope="col">Property Updated</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>&lt;input type="text"&gt;</code></td>
+                                        <td><code>input</code></td>
+                                        <td><code>value</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>&lt;input type="checkbox"&gt;</code></td>
+                                        <td><code>change</code></td>
+                                        <td><code>checked</code> (boolean)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>&lt;select&gt;</code></td>
+                                        <td><code>change</code></td>
+                                        <td><code>value</code> of the selected option</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>&lt;input type="radio"&gt;</code></td>
+                                        <td><code>change</code></td>
+                                        <td><code>value</code> of the selected radio</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>When using <code>[(ngModel)]</code> inside an HTML
+                                    <code>&lt;form&gt;</code> tag, you must define a <code>name</code> attribute on the
+                                    input element. Angular uses this
+                                    name to register the control with the internal <code>NgForm</code> instance that is
+                                    automatically
+                                    created for the form.
+                                </p>
+                            </div>
+                        </div>
+                        <p class="h5">Comparison: Two-Way Binding vs. Signals</p>
+                        <p>With the introduction of Angular Signals (v16+), developers have a more performant way to
+                            handle reactive state. While <code>[(ngModel)]</code> is still widely used for simple forms,
+                            Signals provide a more granular way to track changes across the entire application without
+                            the overhead of heavy change detection cycles.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Aspect</th>
+                                        <th scope="col">ngModel (Two-Way)</th>
+                                        <th scope="col">Signals (Model Input)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Complexity</th>
+                                        <td>Simple, "magic" synchronization.</td>
+                                        <td>Requires signal functions <code>()</code> to read.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Performance</th>
+                                        <td>Triggers full change detection.</td>
+                                        <td>Updates only the specific parts of the DOM.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Imports</th>
+                                        <td>Requires <code>FormsModule</code>.</td>
+                                        <td>Part of <code>@angular/core</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Use Case</th>
+                                        <td>Quick forms and internal component state.</td>
+                                        <td>Scalable state management and high-performance UIs.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Edge Case: Custom Form Controls</p>
+                        <p>By default, <code>ngModel</code> only works on standard HTML form elements. If you create a
+                            custom
+                            component (like a custom star-rating component) and want to use <code>[(ngModel)]</code> on
+                            it, your
+                            component must implement the <code>ControlValueAccessor</code> interface. This tells Angular
+                            how to
+                            "write" a value to your component and how to "read" when a value inside your component
+                            changes.
+                        </p>
+                        <p>Warning: Overusing two-way data binding in very large forms can lead to performance
+                            degradation because every keystroke triggers a change detection cycle for the entire
+                            component tree. For complex, high-performance forms, Reactive Forms are generally
+                            recommended over template-driven <code>ngModel</code>.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-2-7">
                         <p class="h3">Content Projection (&lt;ng-content&gt;)</p>
-                        <p>Content goes here...</p>
+                        <p>Content projection is a pattern in which you insert, or "project," the content you want to
+                            use inside another component. Typically, when you place HTML or other components between the
+                            opening and closing tags of a custom component (e.g.,
+                            <code>&lt;app-card&gt;...&lt;/app-card&gt;</code>), Angular
+                            ignores that content by default. Content projection allows you to create "wrapper"
+                            components—such as modals, cards, or layouts—that provide a consistent frame around dynamic
+                            content provided by the parent.
+                        </p>
+                        <p>This is achieved using the <code>&lt;ng-content&gt;</code>element. It acts as a placeholder
+                            that tells Angular
+                            where to render the content it finds between the host component's tags. This mechanism
+                            is vital for building highly reusable UI libraries where the container's structure is
+                            fixed, but the internal content varies.
+                        </p>
+                        <p class="h5">Basic Single-Slot Projection</p>
+                        <p>In its simplest form, you place a single <code>&lt;ng-content&gt;&lt;/ng-content&gt;</code>
+                            tag inside your
+                            component's template. When the parent component uses the child, any elements placed inside
+                            the child's tags will be "projected" into that exact spot.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-simple-card',
+  standalone: true,
+  template: `
+    &lt;div class="card-frame"&gt;
+      &lt;div class="card-body"&gt;
+        &lt;ng-content&gt;&lt;/ng-content&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  `,
+  styles: [`
+    .card-frame { border: 1px solid #ddd; padding: 1rem; border-radius: 8px; }
+  `]
+})
+export class SimpleCardComponent {}
+</code></pre>
+                        <p class="h5">Usage in Parent:</p>
+                        <pre><code class="language-html">
+&lt;app-simple-card&gt;
+  &lt;p&gt;This paragraph is projected into the card body.&lt;/p&gt;
+&lt;/app-simple-card&gt;
+</code></pre>
+                        <p class="h5">Multi-Slot (Named) Projection</p>
+                        <p>Often, a component needs multiple placeholders—for example, a card with a header, a body, and
+                            a footer. Angular supports this via the <code>select</code> attribute on the
+                            <code>&lt;ng-content&gt;</code> tag. The select
+                            attribute uses CSS selectors to determine which content goes into which slot. You can
+                            <code>select</code> content based on tag names, classes, or attributes.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Selector Type</th>
+                                        <th scope="col">Example Syntax</th>
+                                        <th scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Tag Selector</th>
+                                        <td><code>select="header"</code></td>
+                                        <td>Projects elements with the <code>&lt;header&gt;</code> tag.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Class Selector</th>
+                                        <td><code>select=".card-bio"</code></td>
+                                        <td>Projects elements having the <code>card-bio</code> CSS class.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Attribute Selector</th>
+                                        <td><code>select="[card-info]"</code></td>
+                                        <td>Projects elements with the <code>card-info</code> attribute.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Default</th>
+                                        <td>No <code>select</code> attribute</td>
+                                        <td>Projects all content that didn't match other slots.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <pre><code class="language-javascript">
+@Component({
+  selector: 'app-fancy-card',
+  standalone: true,
+  template: `
+    &lt;div class="card"&gt;
+      &lt;header class="card-header"&gt;
+        &lt;ng-content select="[header]"&gt;&lt;/ng-content&gt;
+      &lt;/header&gt;
+      
+      &lt;main class="card-content"&gt;
+        &lt;ng-content&gt;&lt;/ng-content&gt; &lt;/main&gt;
+      
+      &lt;footer class="card-footer"&gt;
+        &lt;ng-content select=".footer-actions"&gt;&lt;/ng-content&gt;
+      &lt;/footer&gt;
+    &lt;/div&gt;
+  `
+})
+export class FancyCardComponent {}
+</code></pre>
+                        <p class="h5">Usage in Parent:</p>
+                        <pre><code class="language-html">
+&lt;app-fancy-card&gt;
+  &lt;h2 header&gt;Project Title&lt;/h2&gt;
+  
+  &lt;p&gt;This is the main description of the project.&lt;/p&gt;
+  
+  &lt;div class="footer-actions"&gt;
+    &lt;button&gt;Like&lt;/button&gt;
+    &lt;button&gt;Share&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/app-fancy-card&gt;
+</code></pre>
+                        <p class="h5">Content vs. View: Lifecycle Implications</p>
+                        <p>Projected content is considered "Content" rather than "View" for the component receiving it.
+                            This distinction is important for lifecycle hooks. If you need to interact with projected
+                            elements from your TypeScript code, you cannot use <code>@ViewChild</code>. Instead, you
+                            must use
+                            <code>@ContentChild</code> or <code>@ContentChildren</code>.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Lifecycle Hook</th>
+                                        <th scope="col">Purpose</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><code>ngAfterContentInit</code></th>
+                                        <td>Called after Angular performs the initial projection.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>ngAfterContentChecked</code></th>
+                                        <td>Called after every check of the projected content.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <pre><code class="language-javascript">
+import { Component, ContentChild, ElementRef, AfterContentInit } from '@angular/core';
+
+@Component({ selector: 'app-content-checker', standalone: true, template: `&lt;ng-content&gt;&lt;/ng-content&gt;` })
+export class ContentCheckerComponent implements AfterContentInit {
+  // Looking for an element with the #info template variable in projected content
+  @ContentChild('info') projectedInfo!: ElementRef;
+
+  ngAfterContentInit() {
+    console.log('Projected content is ready:', this.projectedInfo.nativeElement.textContent);
+  }
+}
+</code></pre>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>The <code>&lt;ng-content&gt;</code> tag does not create a real DOM element. It is a
+                                    "shadow" element
+                                    used by the Angular compiler. Consequently, you cannot apply CSS classes or
+                                    directives directly to <code>&lt;ng-content&gt;</code>. If you need to style the
+                                    wrapper, apply
+                                    those styles to the surrounding <code>div</code> or container.</p>
+                            </div>
+                        </div>
+                        <p class="h5">Comparison: ng-content vs. ng-template</p>
+                        <p>While both are used for dynamic UI, they serve different architectural goals.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Feature</th>
+                                        <th scope="col">ng-content</th>
+                                        <th scope="col">ng-template</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Evaluation</th>
+                                        <td>Content is evaluated by the parent.</td>
+                                        <td>Content is evaluated only when instantiated.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Reusability</th>
+                                        <td>Projected once into a specific slot.</td>
+                                        <td>Can be stamped out multiple times (e.g., in a loop).</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Control</th>
+                                        <td>Child has limited control over content logic.</td>
+                                        <td>Child decides when and how to render the template.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Usage</th>
+                                        <td>Creating layout wrappers.</td>
+                                        <td>Creating highly dynamic UI like tooltips or virtual scrolls.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>Warning: Content projected via <code>&lt;ng-content&gt;</code> is always initialized and
+                            exists in memory, even if it is
+                            hidden by an <code>@if</code> block inside the child component. This is because the parent
+                            component
+                            owns the lifecycle of that content. For performance-heavy content that should only exist
+                            when needed, consider using Template Projection with <code>ng-template</code>.</p>
                     </section>
+
                     <section class="docs-section" id="item-2-8">
                         <p class="h3">View Encapsulation (CSS Scoping)</p>
-                        <p>Content goes here...</p>
+                        <p>In traditional web development, CSS is globally scoped. A style defined for a <code>p</code>
+                            tag in one
+                            stylesheet can inadvertently affect every paragraph across the entire website. Angular
+                            solves this problem through View Encapsulation. This mechanism ensures that the styles
+                            defined within a component's metadata are isolated to that component's template, preventing
+                            "CSS leakage" where styles bleed out to the rest of the application or bleed in from other
+                            components.
+                        </p>
+                        <p>Angular achieves this by default by modifying the CSS selectors and the HTML elements during
+                            the build process. It appends unique attributes (such as <code>_ngcontent-c1</code>) to the
+                            component's
+                            elements and updates the CSS rules to target those specific attributes. This creates a
+                            sandbox environment for every component's UI.
+                        </p>
+                        <p class="h5">Encapsulation Modes</p>
+                        <p>Angular provides three distinct strategies for handling view encapsulation. You can configure
+                            these per component using the <code>encapsulation</code> property in the
+                            <code>@Component</code> decorator.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Mode</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Behavior</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Emulated (Default)</th>
+                                        <td>Styles are scoped to the component using unique attributes.</td>
+                                        <td>Simulates Shadow DOM behavior without requiring browser support.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">None</th>
+                                        <td>Styles are added to the global <code>&lt;head&gt;</code> of the document.
+                                        </td>
+                                        <td>Scoping is disabled; styles affect the entire application.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">ShadowDom</th>
+                                        <td>Uses the browser's native Shadow DOM API.</td>
+                                        <td>Provides true isolation; styles cannot cross the shadow boundary.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Implementing Encapsulation Modes</p>
+                        <p>To change the default behavior, you must import <code>ViewEncapsulation</code> from
+                            <code>@angular/core</code>.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component, ViewEncapsulation } from '@angular/core';
+
+@Component({
+  selector: 'app-encapsulation-demo',
+  standalone: true,
+  template: `
+    &lt;div class="banner"&gt;
+      &lt;h1&gt;Encapsulated Header&lt;/h1&gt;
+    &lt;/div&gt;
+  `,
+  styles: [`
+    /* This style only affects .banner inside THIS component */
+    .banner { background-color: #007bff; color: white; padding: 10px; }
+  `],
+  encapsulation: ViewEncapsulation.Emulated // Default, can be omitted
+})
+export class EncapsulationComponent {}
+</code></pre>
+                        <p class="h5">Deep Dive: Penetrating the Boundary with ::ng-deep</p>
+                        <p>Sometimes, a parent component needs to force a style onto a child component or a third-party
+                            library component where you do not have access to the source code. For these scenarios,
+                            Angular provides the <code>::ng-deep</code> pseudo-class. When you prefix a selector with
+                            <code>::ng-deep</code>,
+                            Angular disables encapsulation for that specific rule, allowing the style to act globally or
+                            "pierce" down into child components.
+                        </p>
+                        <pre><code class="language-javascript">
+@Component({
+  selector: 'app-parent-styler',
+  standalone: true,
+  template: `&lt;app-third-party-widget&gt;&lt;/app-third-party-widget&gt;`,
+  styles: [`
+    /* Targets a class inside the child component, even though it's encapsulated */
+    :host ::ng-deep .widget-title {
+      color: gold;
+      font-weight: bold;
+    }
+  `]
+})
+export class ParentStylerComponent {}                        
+                        </code></pre>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>The <code>:host</code> selector is a special pseudo-class used to target the
+                                    component's host
+                                    element itself (the custom tag, e.g., <code>&lt;app-encapsulation-demo&gt;</code>).
+                                    It is the
+                                    only way
+                                    to style the outer shell of your component from within its own CSS file.</p>
+                            </div>
+                        </div>
+                        <p class="h5">Comparison: Shadow DOM vs. Emulated</p>
+                        <p>While both aim for isolation, they function differently at the browser level.</p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped border">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Feature</th>
+                                        <th scope="col">Emulated (Default)</th>
+                                        <th scope="col">ShadowDom (Native)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Browser Support</th>
+                                        <td>All modern browsers.</td>
+                                        <td>Only browsers supporting Web Components.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">DOM Structure</th>
+                                        <td>Regular DOM with attributes.</td>
+                                        <td>Separate <code>#shadow-root</code> in the inspector.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Global Styles</th>
+                                        <td>Global styles (like <code>body</code> fonts) still apply.</td>
+                                        <td>Global styles are strictly blocked from entering.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Performance</th>
+                                        <td>High; minimal overhead.</td>
+                                        <td>Slightly more overhead due to browser API.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Advanced Selectors</p>
+                        <p>Angular CSS scoping includes specific pseudo-classes to manage complex styling hierarchies.
+                        </p>
+                        <ul>
+                            <li>:host-context(): Used to style a component based on a condition in its ancestors. For
+                                example, applying a "dark theme" class if any parent has a <code>.dark-mode</code>
+                                class.
+                            </li>
+                            <li>:host: Used to style the host element.
+                            </li>
+                        </ul>
+                        <pre><code class="language-css">
+/* Style the host only if it has the .active class */
+:host(.active) {
+  border: 2px solid green;
+}
+
+/* Style the component differently if it's inside a 'dark-theme' container */
+:host-context(.dark-theme) h1 {
+  color: #efefef;
+}
+</code></pre>
+                        <p>Warning: Use <code>::ng-deep</code> with extreme caution. Because it makes the style global,
+                            it can lead
+                            to maintenance difficulties where styles unintentionally override other parts of your
+                            application. Always wrap <code>::ng-deep</code> inside a <code>:host</code> selector to
+                            limit its scope to the current
+                            component's children only.
+                        </p>
+
                     </section>
                 </article>
 
@@ -1424,19 +2965,778 @@ ng build --configuration production
                     <hr>
                     <section class="docs-section" id="item-3-1">
                         <p class="h3">Angular Signals (Writable & Computed)</p>
-                        <p>Content goes here...</p>
+                        <p>Introduced as the most significant change to Angular's reactivity model in years, Signals
+                            provide a granular way to manage state. Unlike the traditional change detection mechanism
+                            that checks the entire component tree when an event occurs, Signals allow Angular to
+                            identify the specific parts of the UI that need to be updated. This "fine-grained
+                            reactivity" results in significantly better performance and a more predictable data flow.
+                        </p>
+                        <p>A Signal is a wrapper around a value that notifies interested consumers when that value
+                            changes. When a signal is read within a template or another reactive context, Angular
+                            automatically tracks that dependency. If the signal's value is updated later, Angular knows
+                            exactly which components or computations need to be re-evaluated.
+                        </p>
+                        <p class="h5">Writable Signals</p>
+                        <p>A Writable Signal allows you to directly update its value. You create one using the
+                            <code>signal()</code>
+                            function. To read the value of a signal, you call it as a function (e.g.,
+                            <code>count()</code>). This
+                            function call is what allows Angular to register the dependency.
+                        </p>
+                        <p>To modify the value, you use the <code>.set()</code> method for a brand new value, or the
+                            <code>.update()</code> method
+                            when the new value depends on the previous one.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component, signal } from '@angular/core';
+
+@Component({
+  selector: 'app-counter',
+  standalone: true,
+  template: `
+    &lt;div class="counter-box"&gt;
+      &lt;h2&gt;Counter: {{ count() }}&lt;/h2&gt;
+      &lt;button (click)="increment()"&gt;+1&lt;/button&gt;
+      &lt;button (click)="reset()"&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+  `
+})
+export class CounterComponent {
+  // Initializing a Writable Signal
+  count = signal(0);
+
+  increment() {
+    // Update based on the previous value
+    this.count.update(value =&gt; value + 1);
+  }
+
+  reset() {
+    // Set to a specific value
+    this.count.set(0);
+  }
+}
+</code></pre>
+                        <p class="h5">Computed Signals</p>
+                        <p>A Computed Signal is a reactive value that derives its state from other signals. It is
+                            defined using the <code>computed()</code> function. Computed signals are read-only; you
+                            cannot manually set their value. Instead, they automatically re-calculate whenever any of
+                            the signals they depend on change.
+                        </p>
+                        <p>One of the most powerful features of computed signals is that they are lazily evaluated and
+                            memoized. The calculation only runs the first time you read the signal, and then the result
+                            is cached. It will only re-calculate if its dependency signals change.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Feature</th>
+                                        <th scope="col">Writable Signal</th>
+                                        <th scope="col">Computed Signal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Creation</th>
+                                        <td><code>signal(initialValue)</code></td>
+                                        <td><code>computed(() => derivation)</code></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Mutability</th>
+                                        <td>Mutable via <code>.set()</code> and <code>.update()</code>.</td>
+                                        <td>Read-only (Immutable).</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Dependency</th>
+                                        <td>None.</td>
+                                        <td>Automatically tracks signals called inside.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Use Case</th>
+                                        <td>Storing primary state (e.g., user input).</td>
+                                        <td>Deriving data (e.g., filtered lists, totals).</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <pre><code class="language-javascript">
+import { Component, signal, computed } from '@angular/core';
+
+@Component({
+  selector: 'app-shopping-cart',
+  standalone: true,
+  template: `
+    &lt;p&gt;Price: {{ price() | currency }}&lt;/p&gt;
+    &lt;p&gt;Quantity: {{ quantity() }}&lt;/p&gt;
+    &lt;hr&gt;
+    &lt;p&gt;&lt;strong&gt;Total: {{ total() | currency }}&lt;/strong&gt;&lt;/p&gt;
+    &lt;button (click)="add()"&gt;Add One&lt;/button&gt;
+  `
+})
+export class ShoppingCartComponent {
+  price = signal(100);
+  quantity = signal(1);
+
+  // Deriving a value reactively
+  total = computed(() =&gt; this.price() * this.quantity());
+
+  add() {
+    this.quantity.update(q =&gt; q + 1);
+  }
+}
+</code></pre>
+                        <p class="h5">Signal Equality and Optimization</p>
+                        <p>By default, signals use referential equality (<code>===</code>) to determine if a value has
+                            changed. If you set a signal to the same value it already holds, consumers are not notified,
+                            and no UI updates occur. When working with objects or arrays, you can provide a custom
+                            equality function to the signal configuration to control this behavior.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Configuration Option</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Purpose</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">equal</th>
+                                        <td>Function</td>
+                                        <td>A custom comparator to decide if the new value is different from the old.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>Because signals are functions, you must always include the parentheses () when
+                                    accessing them in your TypeScript code or HTML templates. Forgetting the parentheses
+                                    will pass the signal object itself rather than its value, often resulting in
+                                    <code>[function]</code> appearing in your UI.
+                                </p>
+                            </div>
+                        </div>
+                        <p class="h5">Comparison: Signals vs. RxJS Observables</p>
+                        <p>While both handle reactivity, Signals and RxJS (Observables) are intended for different use
+                            cases. Signals are designed for state management within the UI, while RxJS is designed for
+                            asynchronous event streams (like HTTP requests or web sockets).
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Aspect</th>
+                                        <th scope="col">Signals</th>
+                                        <th scope="col">RxJS Observables</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Value Availability</th>
+                                        <td>Always synchronous.</td>
+                                        <td>Can be synchronous or asynchronous.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Subscription</th>
+                                        <td>Automatic (via tracking).</td>
+                                        <td>Manual (via <code>.subscribe()</code> or <code>async</code> pipe).</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Glitches</th>
+                                        <td>No "glitch" (intermediate states).</td>
+                                        <td>Can suffer from transient inconsistent states.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Complexity</th>
+                                        <td>Simple; tailored for UI state.</td>
+                                        <td>High; powerful operators for complex logic.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>Warning: Do not perform "side effects" (like making an HTTP call or manually modifying the
+                            DOM) inside a <code>computed()</code> function. Computed signals should be "pure"—they
+                            should only
+                            calculate and return a value based on their dependencies.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-3-2">
                         <p class="h3">Effects</p>
-                        <p>Content goes here...</p>
+                        <p>While Signals and Computed Signals are designed to manage and derive state, Effects are
+                            designed to handle side effects. An effect is an operation that runs whenever one or more
+                            signal values change. Unlike a computed signal, which must be "pure" and return a value, an
+                            effect is a "fire-and-forget" mechanism used for tasks that stay outside the typical data
+                            flow, such as logging, manual DOM manipulation, or synchronizing data with local storage.
+                        </p>
+                        <p>An effect is created using the <code>effect()</code> function. Much like a computed signal,
+                            an effect
+                            automatically tracks every signal called within its function body. When any of those signals
+                            change, the effect is scheduled to run again.
+                        </p>
+                        <p class="h5">Creating and Using Effects</p>
+                        <p>Effects must be created within an injection context, such as a component’s constructor or a
+                            field initializer. This is because effects are tied to the lifecycle of the object that
+                            creates them; when the component is destroyed, the effect is automatically cleaned up.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component, signal, effect } from '@angular/core';
+
+@Component({
+  selector: 'app-logger-demo',
+  standalone: true,
+  template: `
+    &lt;button (click)="increment()"&gt;Increment: {{ count() }}&lt;/button&gt;
+  `
+})
+export class LoggerComponent {
+  count = signal(0);
+
+  constructor() {
+    // Defining an effect in the constructor (Injection Context)
+    effect(() =&gt; {
+      console.log(`The current count is: ${this.count()}`);
+      
+      // You could also sync with LocalStorage here
+      localStorage.setItem('app_count', this.count().toString());
+    });
+  }
+
+  increment() {
+    this.count.update(c =&gt; c + 1);
+  }
+}
+                        </code></pre>
+                        <p class="h5">Effect Execution Timing</p>
+                        <p>Effects do not run immediately when a signal changes. Instead, they are scheduled and run
+                            during the microtask phase. This means that if you update a signal three times in a single
+                            synchronous block of code, the effect will only run once with the final value. This batching
+                            mechanism prevents unnecessary work and ensures the UI remains performant.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Aspect</th>
+                                        <th scope="col">Behavior</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Scheduling</th>
+                                        <td>Runs asynchronously after the code that updated the signal.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Batching</th>
+                                        <td>Multiple signal updates trigger only one effect execution.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Cleanup</th>
+                                        <td>Automatically destroyed with the component/service.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Tracking</th>
+                                        <td>Dynamic; it tracks only the signals read during the last execution.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Manual Cleanup with onCleanup</p>
+                        <p>Sometimes an effect starts a process that needs to be stopped before the next run—such as a
+                            <code>setTimeout</code> or a manual subscription. The <code>effect()</code> function
+                            provides an <code>onCleanup</code> callback as
+                            an argument to handle these scenarios.
+                        </p>
+                        <pre><code class="language-javascript">
+effect((onCleanup) =&gt; {
+  const user = this.currentUser();
+  
+  const timer = setTimeout(() =&gt; {
+    console.log(`User ${user} has been active for 5 seconds`);
+  }, 5000);
+
+  // This runs before the effect re-runs OR when the component is destroyed
+  onCleanup(() =&gt; {
+    clearTimeout(timer);
+  });
+});
+</code></pre>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>Effects are rarely needed for most application logic. Before using an effect, ask if
+                                    the task could be handled by a <code>computed</code> signal or a standard event
+                                    handler. Effects
+                                    are best reserved for "leaf-node" operations like logging or integrating with
+                                    non-Angular libraries.
+                                </p>
+                            </div>
+                        </div>
+                        <p class="h5">Advanced Configuration: Manual Cleanup</p>
+                        <p>While effects are automatically destroyed, you can choose to manage the lifecycle manually by
+                            capturing the <code>EffectRef</code> returned by the <code>effect()</code> function. This is
+                            useful if you want to stop
+                            the effect based on a specific user action rather than waiting for component destruction.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Option</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><code>manualCleanup</code></th>
+                                        <td>boolean</td>
+                                        <td>If true, the effect won't destroy itself with the component.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>allowSignalWrites</code></th>
+                                        <td>boolean</td>
+                                        <td><strong>(Discouraged)</strong> Allows updating other signals inside the
+                                            effect.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <pre><code class="language-javascript">
+export class ManualEffectComponent {
+  data = signal(null);
+  
+  // Storing the reference to the effect
+  private loggingEffect = effect(() =&gt; {
+    console.log('Data changed:', this.data());
+  });
+
+  stopLogging() {
+    // Manually destroying the effect
+    this.loggingEffect.destroy();
+  }
+}
+</code></pre>
+                        <p>Warning: By default, Angular prevents you from writing to a signal inside an
+                            <code>effect()</code> (e.g.,
+                            <code>this.otherSignal.set(val)</code>). This is to prevent "infinite circular updates"
+                            where an effect
+                            updates a signal that then triggers the same effect again. While you can bypass this with
+                            <code>allowSignalWrites: true</code>, it is a significant anti-pattern and usually indicates
+                            a flaw in
+                            the application's reactive architecture.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-3-3">
                         <p class="h3">RxJS Interop with Signals</p>
-                        <p>Content goes here...</p>
+                        <p>As Angular evolves toward a signal-based reactive core, developers frequently need to bridge
+                            the gap between Signals and RxJS Observables. While Signals excel at managing synchronous
+                            state and UI updates, RxJS remains the industry standard for handling asynchronous events,
+                            data streams, and complex transformations like debouncing or polling.
+                        </p>
+                        <p>To facilitate this, Angular provides the <code>@angular/core/rxjs-interop</code> package.
+                            This library
+                            offers utility functions to convert Observables into Signals and vice versa, allowing you to
+                            leverage the strengths of both systems within a single application.</p>
+                        <p class="h5">Converting Observables to Signals: <code>toSignal()</code></p>
+                        <p>The <code>toSignal()</code> function tracks an Observable and returns a Signal that always
+                            reflects the
+                            latest value emitted by that Observable. This is particularly useful for handling HTTP
+                            requests or state streams in a component without the need for manual subscriptions or the
+                            <code>async</code> pipe.
+                        </p>
+                        <p>When you use <code>toSignal()</code>, the subscription is automatically managed. Angular
+                            subscribes when
+                            the signal is created and unsubscribes when the surrounding context (like a component or
+                            service) is destroyed.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+@Component({
+  selector: 'app-user-list',
+  standalone: true,
+  template: `
+    @for (user of users(); track user.id) {
+      &lt;div&gt;{{ user.name }}&lt;/div&gt;
+    } @empty {
+      &lt;p&gt;No users found or loading...&lt;/p&gt;
+    }
+  `
+})
+export class UserListComponent {
+  private http = inject(HttpClient);
+
+  // Convert an Observable stream directly into a Signal
+  users = toSignal(
+    this.http.get&lt;any[]&gt;('https://api.example.com/users'), 
+    { initialValue: [] }
+  );
+}
+</code></pre>
+                        <p class="h5"><code>toSignal</code> Configuration Options</p>
+                        <p>Because Signals must always have a value, but Observables might not emit immediately,
+                            <code>toSignal</code> provides several ways to handle the initial state and potential
+                            errors.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Option</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><code>initialValue</code></th>
+                                        <td><span>T</span></td>
+                                        <td>The value the signal holds before the Observable emits its first item.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>requireSync</code></th>
+                                        <td><span>boolean</span></td>
+                                        <td>If true, the Observable must emit synchronously upon subscription.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>manualCleanup</code></th>
+                                        <td><span>boolean</span></td>
+                                        <td>If true, you must manually destroy the underlying subscription.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>rejectErrors</code></th>
+                                        <td><span>boolean</span></td>
+                                        <td>If true, any error in the Observable will cause the signal to throw an error
+                                            on read.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>If an Observable emits an error, the signal created by <code>toSignal</code> will
+                                    throw that error
+                                    whenever the signal is read. It is highly recommended to use RxJS error-handling
+                                    operators like <code>catchError</code> within the Observable stream before passing
+                                    it to
+                                    <code>toSignal</code>.
+                                </p>
+                            </div>
+                        </div>
+                        <p class="h5">Converting Signals to Observables: <code>toObservable()</code></p>
+                        <p>The <code>toObservable()</code> function creates an Observable that emits the current value
+                            of a signal
+                            whenever that signal changes. This is essential when you want to use RxJS operators (like
+                            <code>debounceTime</code>, <code>switchMap</code>, or <code>filter</code>) on a value that
+                            is stored in a Signal.
+                        </p>
+                        <p>This conversion occurs inside an effect. Consequently, the Observable emits values
+                            asynchronously (during the microtask phase) rather than immediately when the signal's value
+                            is set.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-search',
+  standalone: true,
+  template: `&lt;input (input)="updateQuery($event)" placeholder="Search..."&gt;`
+})
+export class SearchComponent {
+  searchQuery = signal('');
+
+  // Convert the signal to an observable to use RxJS power
+  searchData$ = toObservable(this.searchQuery).pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+    switchMap(query =&gt; this.performSearch(query))
+  );
+
+  updateQuery(event: Event) {
+    const val = (event.target as HTMLInputElement).value;
+    this.searchQuery.set(val);
+  }
+
+  private performSearch(query: string) {
+    // Return search logic...
+  }
+}
+                        </code></pre>
+                        <p class="h5">Choosing the Right Tool</p>
+                        <p>Knowing when to use a Signal versus an Observable is key to writing clean, maintainable
+                            Angular code.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Use Case</th>
+                                        <th scope="col">Recommended Tool</th>
+                                        <th scope="col">Why?</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Component State</th>
+                                        <td>Signal</td>
+                                        <td>Simple API, synchronous access, and efficient UI updates.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Derived UI Data</th>
+                                        <td>Computed Signal</td>
+                                        <td>Automatic dependency tracking and lazy evaluation.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">HTTP Requests</th>
+                                        <td>RxJS Observable</td>
+                                        <td>Handles completion, errors, and cancellation (aborting) naturally.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">User Input Streams</th>
+                                        <td>RxJS Observable</td>
+                                        <td>Provides operators for debouncing and throttling.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Global State</th>
+                                        <td>Signals</td>
+                                        <td>Easier for various components to read/write without complex streams.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>Warning: Do not create a <code>toObservable</code> inside a loop or a frequently called
+                            method. Like
+                            <code>effect()</code>, <code>toObservable</code> must be called in an injection context
+                            (like the constructor) or have
+                            an explicit <code>Injector</code> passed to it. Creating subscriptions repeatedly can lead
+                            to severe
+                            memory leaks and performance degradation.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-3-4">
                         <p class="h3">Change Detection Strategy (OnPush vs Default)</p>
-                        <p>Content goes here...</p>
+                        <p>Change Detection is the process by which Angular synchronizes the state of the application
+                            with the user interface. It determines when a component’s data has changed and re-renders
+                            the template to reflect those changes. By default, Angular is conservative; it runs change
+                            detection on the entire component tree whenever any event occurs (such as a click, a timer,
+                            or an HTTP response). However, as applications scale, this "check-everything" approach can
+                            lead to performance bottlenecks.
+                        </p>
+                        <p>Angular provides two primary strategies for change detection: Default and OnPush.
+                            Understanding the technical difference between these two is the key to building
+                            high-performance, industrial-grade Angular applications.
+                        </p>
+                        <p class="h5">The Default Strategy (CheckAlways)</p>
+                        <p>In the Default strategy, Angular makes no assumptions about when a component needs to be
+                            updated. Whenever any asynchronous event occurs in the application, Angular performs a
+                            "dirty check" on every component in the tree, starting from the root. It compares the
+                            current values in the template with the previous values. If it finds a difference, it
+                            updates the DOM.
+                        </p>
+                        <p>While this is highly developer-friendly because "things just work," it can be inefficient.
+                            Even if a specific component’s data has not changed, Angular will still execute its change
+                            detection logic and re-evaluate its template expressions.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-default-cd',
+  standalone: true,
+  // ChangeDetectionStrategy.Default is the implicit default
+  template: `
+    &lt;div&gt;
+      &lt;h2&gt;{{ user.name }}&lt;/h2&gt;
+      &lt;button (click)="noop()"&gt;Trigger CD&lt;/button&gt;
+    &lt;/div&gt;
+  `
+})
+export class DefaultComponent {
+  user = { name: 'John Doe' };
+
+  noop() {
+    // Even if this function does nothing, Angular will re-check 
+    // this component and all its children.
+  }
+}
+</code></pre>
+                        <p class="h5">The OnPush Strategy (CheckOnce)</p>
+                        <p>The OnPush strategy tells Angular that the component only depends on its Inputs and Signals.
+                            When a component is marked as <code>OnPush</code>, Angular will skip change detection for
+                            that component
+                            and its entire subtree unless specific "trigger" conditions are met. This drastically
+                            reduces the number of checks performed across the application.
+                        </p>
+                        <p>To use this strategy, you must set the <code>changeDetection</code> property in the
+                            <code>@Component</code> decorator
+                            to <code>ChangeDetectionStrategy.OnPush</code>.
+                        </p>
+
+                        <pre><code class="language-javascript">
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+
+@Component({
+  selector: 'app-on-push-cd',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    &lt;div&gt;
+      &lt;h2&gt;User: {{ name }}&lt;/h2&gt;
+    &lt;/div&gt;
+  `
+})
+export class OnPushComponent {
+  @Input() name: string = '';
+}
+</code></pre>
+                        <p class="h5">When does OnPush trigger a refresh?</p>
+                        <p>A component using <code>OnPush</code> will only update its view in the following specific
+                            scenarios:</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Trigger</th>
+                                        <th scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Input Reference Change</th>
+                                        <td>The <code>@Input</code> property receives a new object reference (not just a
+                                            mutation of a property).</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Event Originates Here</th>
+                                        <td>A DOM event (like a click) is fired from within the component or its
+                                            children.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Signal Update</th>
+                                        <td>A <strong>Signal</strong> read within the template is updated.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Manual Trigger</th>
+                                        <td>The developer explicitly calls <code>markForCheck()</code> via the
+                                            <code>ChangeDetectorRef</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Async Pipe</th>
+                                        <td>The <code>AsyncPipe</code> emits a new value from an Observable or Promise.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Technical Comparison: Default vs. OnPush</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Feature</th>
+                                        <th scope="col">Default Strategy</th>
+                                        <th scope="col">OnPush Strategy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Verification</th>
+                                        <td>Checks every component on every event.</td>
+                                        <td>Checks only when explicitly triggered.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Performance</th>
+                                        <td>Lower (O(N) where N is component count).</td>
+                                        <td>Higher (skips entire branches of the tree).</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Predictability</th>
+                                        <td>High; UI always matches data.</td>
+                                        <td>Requires strict adherence to Immutability.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Best For</th>
+                                        <td>Small apps or simple components.</td>
+                                        <td>Complex UIs, large lists, and performance-critical apps.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">The Role of Immutability</p>
+                        <p>The <code>OnPush</code> strategy relies heavily on Immutability. Because Angular only checks
+                            if the object reference has changed for <code>@Input</code> properties, mutating a property
+                            inside an object will not trigger an update.
+                        </p>
+                        <pre><code class="language-javascript">
+// PARENT COMPONENT LOGIC
+user = { name: 'Alice' };
+
+// ❌ This will NOT trigger OnPush change detection in child
+updateUserMutation() {
+  this.user.name = 'Bob'; 
+}
+
+// ✅ This WILL trigger OnPush change detection in child
+updateUserImmutable() {
+  this.user = { ...this.user, name: 'Bob' }; 
+}
+</code></pre>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>With the introduction of Signals, the complexity of managing <code>OnPush</code> is
+                                    significantly reduced. Signals automatically notify Angular when they change,
+                                    meaning a component can stay in <code>OnPush</code> mode while remaining perfectly
+                                    reactive without requiring the developer to manually manage object references.</p>
+                            </div>
+                        </div>
+                        <p class="h5">Manual Control with ChangeDetectorRef</p>
+                        <p>In advanced scenarios, you might need to control the change detection cycle manually using
+                            the <code>ChangeDetectorRef</code> service.
+                        </p>
+                        <ul>
+                            <li><code>markForCheck()</code>: Schedules the component to be checked in the next cycle (standard for
+                                OnPush).
+                            </li>
+                            <li><code>detectChanges()</code>: Synchronously triggers change detection for this component and its
+                                children right now.
+                            </li>
+                            <li><code>detach()</code> / <code>reattach()</code>: Completely removes a component from the change detection tree for
+                                extreme optimization.
+                            </li>
+                        </ul>
                     </section>
                 </article>
 
