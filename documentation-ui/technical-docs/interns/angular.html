@@ -3645,7 +3645,8 @@ export class OnPushComponent {
                                     <tr>
                                         <th scope="row">Manual Trigger</th>
                                         <td>The developer explicitly calls <code>markForCheck()</code> via the
-                                            <code>ChangeDetectorRef</code>.</td>
+                                            <code>ChangeDetectorRef</code>.
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Async Pipe</th>
@@ -3727,13 +3728,16 @@ updateUserImmutable() {
                             the <code>ChangeDetectorRef</code> service.
                         </p>
                         <ul>
-                            <li><code>markForCheck()</code>: Schedules the component to be checked in the next cycle (standard for
+                            <li><code>markForCheck()</code>: Schedules the component to be checked in the next cycle
+                                (standard for
                                 OnPush).
                             </li>
-                            <li><code>detectChanges()</code>: Synchronously triggers change detection for this component and its
+                            <li><code>detectChanges()</code>: Synchronously triggers change detection for this component
+                                and its
                                 children right now.
                             </li>
-                            <li><code>detach()</code> / <code>reattach()</code>: Completely removes a component from the change detection tree for
+                            <li><code>detach()</code> / <code>reattach()</code>: Completely removes a component from the
+                                change detection tree for
                                 extreme optimization.
                             </li>
                         </ul>
@@ -3747,23 +3751,948 @@ updateUserImmutable() {
                     <hr>
                     <section class="docs-section" id="item-4-1">
                         <p class="h3">Built-in Directives (ngClass, ngStyle)</p>
-                        <p>Content goes here...</p>
+                        <p>Directives are classes that add additional behavior to elements in your Angular applications.
+                            While components are technically directives with templates, Attribute Directives are used to
+                            manage the appearance and behavior of existing DOM elements. The two most frequently used
+                            built-in attribute directives are <code>ngClass</code> and <code>ngStyle</code>. These allow
+                            you to dynamically add,
+                            remove, or modify CSS classes and inline styles based on the state of your component logic.
+                        </p>
+                        <p>By using these directives, you move away from manual DOM manipulation (like
+                            <code>element.classList.add()</code>) and instead adopt a declarative approach where the
+                            view
+                            automatically reflects the underlying data model.
+                        </p>
+                        <p class="h5">Dynamic Styling with ngClass</p>
+                        <p>The <code>ngClass</code> directive allows you to add or remove multiple CSS classes
+                            simultaneously. While
+                            you can use standard property binding for a single class (e.g.,
+                            <code>[class.active]="isActive"</code>),
+                            <code>ngClass</code> is the preferred tool for managing complex sets of classes. It accepts
+                            an object, an
+                            array, or a string.
+                        </p>
+                        <p>The most powerful usage is the Object Literal syntax, where the keys are the class names and
+                            the values are the boolean conditions that determine whether that class should be applied.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-status-box',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    &lt;div [ngClass]="{
+      'box-active': isActive,
+      'box-error': hasError,
+      'box-disabled': isDisabled
+    }"&gt;
+      Content Status: {{ status }}
+    &lt;/div&gt;
+    
+    &lt;button (click)="toggleError()"&gt;Toggle Error State&lt;/button&gt;
+  `,
+  styles: [`
+    .box-active { border: 2px solid blue; }
+    .box-error { background-color: #ffdce0; color: #af0000; }
+    .box-disabled { opacity: 0.5; pointer-events: none; }
+  `]
+})
+export class StatusBoxComponent {
+  isActive = true;
+  hasError = false;
+  isDisabled = false;
+  status = 'Operating';
+
+  toggleError() {
+    this.hasError = !this.hasError;
+    this.status = this.hasError ? 'System Failure' : 'Operating';
+  }
+}
+</code></pre>
+                        <p class="h5">Inline Styling with ngStyle</p>
+                        <p>The <code>ngStyle</code> directive allows you to set multiple inline styles dynamically. Like
+                            <code>ngClass</code>, it is most effective when used with an object where the keys are CSS
+                            property names and the values are the expressions that evaluate to style values.
+                        </p>
+                        <p>This directive is particularly useful for styles that change frequently based on numerical
+                            data or user input, such as the width of a progress bar, the coordinates of a draggable
+                            element, or a user-selected theme color.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-progress-bar',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    &lt;div class="progress-container"&gt;
+      &lt;div [ngStyle]="{
+        'width': progress + '%',
+        'background-color': progress &gt; 80 ? 'red' : 'green',
+        'transition': 'width 0.3s ease'
+      }" class="bar"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;input type="range" [(ngModel)]="progress" min="0" max="100"&gt;
+  `,
+  styles: [`
+    .progress-container { width: 100%; height: 20px; background: #eee; }
+    .bar { height: 100%; }
+  `]
+})
+export class ProgressBarComponent {
+  progress = 50;
+}
+</code></pre>
+                        <p class="h5">Technical Comparison: Attribute Binding vs. Directives</p>
+                        <p>Angular provides multiple ways to style elements. Choosing the right one depends on the
+                            complexity of the logic and the number of properties being manipulated.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Method</th>
+                                        <th scope="col">Syntax</th>
+                                        <th scope="col">Best Use Case</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Class Binding</th>
+                                        <td><code>[class.name]="bool"</code></td>
+                                        <td>Toggling a <strong>single</strong> specific class.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">ngClass</th>
+                                        <td><code>[ngClass]="{...}"</code></td>
+                                        <td>Toggling <strong>multiple</strong> classes based on complex logic.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Style Binding</th>
+                                        <td><code>[style.width.px]="val"</code></td>
+                                        <td>Setting a <strong>single</strong> specific style property (with units).</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">ngStyle</th>
+                                        <td><code>[ngStyle]="{...}"</code></td>
+                                        <td>Setting <strong>multiple</strong> inline styles dynamically.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>For simple class or style toggles, the standard property binding (e.g.,
+                                    <code>[class.is-valid]="valid"</code>) is slightly more performant and cleaner than
+                                    <code>ngClass</code>. Use
+                                    <code>ngClass</code> and <code>ngStyle</code> only when you are managing a
+                                    collection of styles or classes
+                                    together.
+                                </p>
+                            </div>
+                        </div>
+                        <p class="h5">Key Technical Details & Units</p>
+                        <p>When using <code>ngStyle</code>, you must ensure that values requiring units (like
+                            <code>px</code>,<code> %</code>, or <code>em</code>) include
+                            them. You can either append the unit in the string value or use the specific Angular style
+                            binding extension.
+                        </p>
+                        <ul>
+                            <li>String value: <code>'width': progress + 'px'</code></li>
+                            <li>Binding extension: <code>[style.width.px]="progress"</code></li>
+                        </ul>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Feature</th>
+                                        <th scope="col">ngClass Behavior</th>
+                                        <th scope="col">ngStyle Behavior</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Initial Values</th>
+                                        <td>Merges with existing <code>class</code> attribute.</td>
+                                        <td>Merges with existing <code>style</code> attribute.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Null/Undefined</th>
+                                        <td>Removes the class/style if the value is null.</td>
+                                        <td>Removes the specific style property if null.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Cleanup</th>
+                                        <td>Automatically removes classes when conditions fail.</td>
+                                        <td>Automatically removes inline styles when they are no longer provided.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>Warning: Avoid using <code>ngStyle</code> to define large amounts of static CSS. Inline
+                            styles have the
+                            highest specificity and are harder to override via external stylesheets. Always prefer
+                            <code>ngClass</code> with defined CSS classes in your component's stylesheet to maintain a
+                            clean
+                            separation between logic and presentation.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-4-2">
                         <p class="h3">Attribute Directives (Custom)</p>
-                        <p>Content goes here...</p>
+                        <p>While built-in directives like <code>ngClass</code> handle common styling tasks, Custom
+                            Attribute
+                            Directives allow you to create reusable behaviors that can be applied to any DOM element. An
+                            attribute directive changes the appearance or behavior of an element, component, or another
+                            directive. Technically, a directive is a class decorated with the <code>@Directive</code>
+                            decorator,
+                            which provides metadata to Angular identifying the HTML selector used to trigger the
+                            directive's logic.
+                        </p>
+                        <p>Custom directives are essential for implementing low-level DOM interactions—such as handling
+                            hover effects, managing focus, or restricting input characters—that need to be shared across
+                            multiple components without duplicating logic.
+                        </p>
+                        <p class="h5">Creating a Custom Directive</p>
+                        <p>To create a directive, you define a class and use the <code>@Directive</code> decorator. The
+                            most critical
+                            part of the metadata is the <code>selector</code>. By convention, attribute directive
+                            selectors are
+                            wrapped in square brackets <code>[]</code>, which tells Angular to look for this name as an
+                            attribute on
+                            an HTML element.
+                        </p>
+                        <p>To interact with the host element, you typically inject ElementRef (to access the DOM
+                            element) and Renderer2 (to perform DOM manipulations safely across different platforms).
+                        </p>
+                        <pre><code class="language-javascript">
+import { Directive, ElementRef, Renderer2, OnInit, Input } from '@angular/core';
+
+@Directive({
+  selector: '[appHighlight]', // Attribute selector
+  standalone: true
+})
+export class HighlightDirective implements OnInit {
+  @Input() highlightColor = 'yellow';
+  @Input() defaultColor = 'transparent';
+
+  constructor(private el: ElementRef, private renderer: Renderer2) {}
+
+  ngOnInit() {
+    // Set initial background color safely using Renderer2
+    this.renderer.setStyle(this.el.nativeElement, 'backgroundColor', this.defaultColor);
+  }
+}
+</code></pre>
+                        <p class="h5">Handling User Events with HostListener</p>
+                        <p>A directive often needs to respond to events triggered by the user on the host element. The
+                            <code>@HostListener</code> decorator allows you to subscribe to events of the DOM element
+                            that hosts the
+                            directive. This is a declarative and memory-safe way to handle events like
+                            <code>mouseenter</code>,
+                            <code>mouseleave</code>, or <code>click</code>.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Decorator</th>
+                                        <th scope="col">Purpose</th>
+                                        <th scope="col">Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>@HostListener</strong></td>
+                                        <td>Listens for DOM events on the host element.</td>
+                                        <td><code>@HostListener('mouseenter')</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>@HostBinding</strong></td>
+                                        <td>Binds a host element property to a directive property.</td>
+                                        <td><code>@HostBinding('style.border')</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <pre><code class="language-javascript">
+import { Directive, ElementRef, HostListener, Renderer2, Input } from '@angular/core';
+
+@Directive({
+  selector: '[appHoverShadow]',
+  standalone: true
+})
+export class HoverShadowDirective {
+  @Input() shadowColor = 'rgba(0,0,0,0.5)';
+
+  constructor(private el: ElementRef, private renderer: Renderer2) {}
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.setShadow(`0 4px 8px ${this.shadowColor}`);
+  }
+
+  @HostListener('mouseleave') onMouseLeave() {
+    this.setShadow('none');
+  }
+
+  private setShadow(shadow: string) {
+    this.renderer.setStyle(this.el.nativeElement, 'boxShadow', shadow);
+    this.renderer.setStyle(this.el.nativeElement, 'transition', '0.3s');
+  }
+}
+</code></pre>
+                        <p class="h5">Passing Data to Directives</p>
+                        <p>Custom directives can receive data through <code>@Input</code> properties, just like
+                            components. If you want to pass a value directly to the directive using its selector name,
+                            you can alias the input property to match the selector.
+                        </p>
+                        <pre><code class="language-javascript">
+// Inside the directive class
+@Input('appHighlight') color = 'yellow';
+
+// Usage in HTML
+&lt;p [appHighlight]="'cyan'"&gt;Hover over me!&lt;/p&gt;
+</code></pre>
+                        <p class="h5">Directive Metadata and Configuration</p>
+                        <p>When defining a directive, several properties in the decorator control how it interacts with
+                            the application.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Property</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><strong>selector</strong></th>
+                                        <td>string</td>
+                                        <td>The CSS selector that identifies the directive in a template.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><strong>standalone</strong></th>
+                                        <td>boolean</td>
+                                        <td>If true, the directive can be imported directly into components.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><strong>providers</strong></th>
+                                        <td>array</td>
+                                        <td>Allows the directive to provide its own services.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><strong>exportAs</strong></th>
+                                        <td>string</td>
+                                        <td>Defines a name that can be used to export the directive into a local
+                                            template variable.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p> Always use Renderer2 instead of direct element manipulation (e.g.,
+                                    <code>this.el.nativeElement.style.color = 'red'</code>). Renderer2 provides an
+                                    abstraction layer
+                                    that ensures your code works correctly in environments where the DOM might not be
+                                    available, such as Server-Side Rendering (SSR) or Web Workers.
+                                </p>
+                            </div>
+                        </div>
+                        <p class="h5">Best Practices for Directives</p>
+                        <ol>
+                            <li>Prefixing: Always use a custom prefix for your directive selectors (e.g.,
+                                <code>appHighlighter</code>
+                                instead of just <code>highlight</code>) to avoid collisions with standard HTML
+                                attributes or
+                                third-party libraries.
+                            </li>
+                            <li>Statelessness: Try to keep directives focused on DOM behavior. If you find yourself
+                                adding complex business logic, that logic likely belongs in a Service.
+                            </li>
+                            <li>Encapsulation: Use <code>@HostBinding</code> for simple property updates as it is more
+                                concise than
+                                calling <code>Renderer2</code> manually in every method.
+                            </li>
+                        </ol>
+                        <p>Warning: Be careful when using <code>@HostListener</code> on events that fire frequently,
+                            such as <code>scroll</code>
+                            or <code>mousemove</code>. Since these events trigger Angular's change detection cycle by
+                            default, they
+                            can cause performance issues. For high-frequency events, consider running the logic outside
+                            of Angular's zone using <code>NgZone.runOutsideAngular()</code>.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-4-3">
                         <p class="h3">Structural Directives (Custom)</p>
-                        <p>Content goes here...</p>
+                        <p>Structural directives are responsible for shaping or reshaping the DOM's structure, typically
+                            by adding, removing, or manipulating elements. Unlike attribute directives, which only
+                            change the appearance or behavior of a single element, structural directives affect the
+                            layout of the entire DOM branch. You can easily recognize them in templates by the asterisk
+                            (<code>*</code>) prefix, such as <code>*ngIf</code> or <code>*ngFor</code>.
+                        </p>
+                        <p>Technically, the <code>*</code> is syntactic sugar that wraps the host element in an
+                            <code>&lt;ng-template&gt;</code>. When you create a custom structural directive, you are
+                            essentially defining the logic that determines when and how to "stamp out" that template
+                            into the DOM using a View Container.
+                        </p>
+                        <p class="h5">Core Mechanics: TemplateRef and ViewContainerRef</p>
+                        <p>To create a structural directive, your class requires access to two fundamental tools
+                            provided by Angular's dependency injection:
+                        </p>
+                        <ol>
+                            <li>TemplateRef: Represents the content inside the <code>&lt;ng-template&gt;</code> created
+                                by the
+                                asterisk syntax. It is the "blueprint" of what you want to render.
+                            </li>
+                            <li>ViewContainerRef: Represents a container where one or more views can be attached. It is
+                                the "anchor" in the DOM where your blueprint will be physically placed.
+                            </li>
+                        </ol>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Tool</th>
+                                        <th scope="col">Purpose</th>
+                                        <th scope="col">Analogy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">TemplateRef</th>
+                                        <td>Holds the HTML structure to be rendered.</td>
+                                        <td>The Stamp</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">ViewContainerRef</th>
+                                        <td>Manages the location in the DOM.</td>
+                                        <td>The Paper</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Creating a Custom "Unless" Directive</p>
+                        <p>To understand the implementation, consider a directive that does the opposite of
+                            <code>*ngIf</code>. We
+                            will call it <code>*appUnless</code>. It should only render the content if the provided
+                            condition is
+                            false.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+
+@Directive({
+  selector: '[appUnless]',
+  standalone: true
+})
+export class UnlessDirective {
+  private hasView = false;
+
+  constructor(
+    private templateRef: TemplateRef&lt;any&gt;,
+    private viewContainer: ViewContainerRef
+  ) {}
+
+  @Input() set appUnless(condition: boolean) {
+    // If condition is false and we haven't created the view yet, create it
+    if (!condition &amp;&amp; !this.hasView) {
+      this.viewContainer.createEmbeddedView(this.templateRef);
+      this.hasView = true;
+    } 
+    // If condition is true and the view exists, clear the container
+    else if (condition &amp;&amp; this.hasView) {
+      this.viewContainer.clear();
+      this.hasView = false;
+    }
+  }
+}
+</code></pre>
+                        <p class="h5">Usage in Template:</p>
+                        <pre><code class="language-html">
+&lt;p *appUnless="isLoggedIn"&gt;Please log in to see this content.&lt;/p&gt;
+</code></pre>
+                        <p class="h5">De-sugaring the Asterisk</p>
+                        <p>It is critical to understand what Angular does behind the scenes when it encounters the *.
+                            The example above is transformed by the compiler into the following expanded form:
+                        </p>
+                        <pre><code class="language-html">
+&lt;ng-template [appUnless]="isLoggedIn"&gt;
+  &lt;p&gt;Please log in to see this content.&lt;/p&gt;
+&lt;/ng-template&gt;
+</code></pre>
+                        <p>Because of this transformation, the directive is applied to the
+                            <code>&lt;ng-template&gt;</code>, not the <code>&lt;p&gt;</code>
+                            tag. This is why we can inject <code>TemplateRef</code> into the directive’s constructor—the
+                            directive is literally sitting on the template.
+                        </p>
+                        <p class="h5">Passing Context to the Template</p>
+                        <p>Structural directives can also pass data to the template they are rendering. This is
+                            how <code>*ngFor</code> provides variables like <code>item</code> or <code>index</code>. You
+                            achieve this by passing a
+                            context object as the second argument to <code>createEmbeddedView</code>.
+                        </p>
+                        <p>In the context object, the key <code>$implicit</code> is used for the default variable
+                            (let-item),
+                            while other keys map to specific named exports.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Context Key</th>
+                                        <th scope="col">Template Variable</th>
+                                        <th scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><code>$implicit</code></th>
+                                        <td><code>let-val</code></td>
+                                        <td>The primary value passed to the template.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>customKey</code></th>
+                                        <td><code>let-k=customKey</code></td>
+                                        <td>A secondary value mapped to a specific name.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <pre><code class="language-javascript">
+// Inside a directive that provides the current time
+this.viewContainer.createEmbeddedView(this.templateRef, {
+  $implicit: 'User123',
+  time: new Date().toLocaleTimeString()
+});
+</code></pre>
+                        <p class="h5">Usage:</p>
+                        <pre><code class="language-html">
+&lt;div *appUserTime="let user; let t = time"&gt;
+  Hello {{ user }}, the time is {{ t }}.
+&lt;/div&gt;
+</code></pre>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>A single HTML element can only host one structural directive. If you attempt to use
+                                    <code>*ngIf</code> and <code>*ngFor</code> on the same tag, Angular will throw an
+                                    error. To solve this, wrap
+                                    the element in a container like <code>&lt;ng-container&gt;</code> or a
+                                    <code>div</code> to apply the second
+                                    directive.
+                                </p>
+                            </div>
+                        </div>
+                        <p class="h5">Best Practices and Safety</p>
+                        <ol>
+                            <li>Naming Matching: The name of the <code>@Input</code> setter must match the directive's
+                                selector
+                                exactly for the asterisk syntax to work correctly.
+                            </li>
+                            <li>View Management: Always track whether the view is already created (using a boolean like
+                                <code>hasView</code>) to prevent unnecessary DOM destructions and re-creations during
+                                change
+                                detection cycles.
+                            </li>
+                            <li>Cleanup: When the directive is destroyed, the <code>ViewContainerRef</code> is
+                                automatically cleared,
+                                so manual cleanup of the views is usually not required.
+                            </li>
+                        </ol>
+                        <p>Warning: Be cautious with complex logic inside structural directive setters. Since setters
+                            are called during every change detection cycle if the input changes, heavy computations can
+                            lead to UI lag or "flickering" if the DOM is cleared and re-rendered too frequently.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-4-4">
                         <p class="h3">Pipes (Formatting Data)</p>
-                        <p>Content goes here...</p>
+                        <p>Pipes are simple functions designed for use in template expressions to accept an input value
+                            and return a transformed value. In Angular, data transformation should be decoupled from the
+                            component's business logic. Instead of modifying the raw data in your TypeScript class just
+                            for display purposes, you use pipes to format strings, currency amounts, dates, and other
+                            data directly in the view.
+                        </p>
+                        <p>Pipes use the pipe character (<code>|</code>) within an interpolation or property binding
+                            expression. They can be chained together to apply multiple transformations in sequence, and
+                            they can accept optional parameters to fine-tune the output.
+                        </p>
+                        <p class="h5">Built-in Pipes</p>
+                        <p>Angular provides a robust set of built-in pipes for common data transformations. These pipes
+                            are optimized for performance and handle internationalization (i18n) automatically by using
+                            the application's locale settings.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Pipe</th>
+                                        <th scope="col">Purpose</th>
+                                        <th scope="col">Example Syntax</th>
+                                        <th scope="col">Output Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">DatePipe</th>
+                                        <td>Formats date objects or strings.</td>
+                                        <td><code>{{ today | date:'short' }}</code></td>
+                                        <td>2/15/26, 3:43 PM</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">CurrencyPipe</th>
+                                        <td>Formats numbers into currency strings.</td>
+                                        <td><code>{{ 15 | currency:'EUR' }}</code></td>
+                                        <td>€15.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">DecimalPipe</th>
+                                        <td>Formats numbers with specific decimals.</td>
+                                        <td><code>{{ 3.1415 | number:'1.1-2' }}</code></td>
+                                        <td>3.14</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">PercentPipe</th>
+                                        <td>Formats a number as a percentage.</td>
+                                        <td><code>{{ 0.75 | percent }}</code></td>
+                                        <td>75%</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">UpperCasePipe</th>
+                                        <td>Transforms text to all upper case.</td>
+                                        <td><code>{{ 'hi' | uppercase }}</code></td>
+                                        <td>HI</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">JsonPipe</th>
+                                        <td>Converts an object into a JSON string.</td>
+                                        <td><code>{{ user | json }}</code></td>
+                                        <td>{ "id": 1 ... }</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Chaining and Parameterization</p>
+                        <p>You can pass parameters to a pipe by following the pipe name with a colon (:) and the
+                            parameter value. If a pipe accepts multiple parameters, separate them with additional
+                            colons. Furthermore, pipes can be chained to process data through a multi-stage pipeline.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-pipe-demo',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    &lt;div class="product"&gt;
+      &lt;h3&gt;Sale Price: {{ price | currency:'USD':'symbol':'1.0-0' }}&lt;/h3&gt;
+      &lt;p&gt;Expired on: {{ expiryDate | date:'fullDate' | uppercase }}&lt;/p&gt;
+      
+      &lt;p&gt;Category: {{ category | lowercase | titlecase }}&lt;/p&gt;
+    &lt;/div&gt;
+  `
+})
+export class PipeDemoComponent {
+  price = 1250.60;
+  expiryDate = new Date(2026, 11, 25);
+  category = 'ELECTRONICS_HARDWARE';
+}   
+</code></pre>
+                        <p class="h5">Custom Pipes</p>
+                        <p>When built-in pipes do not meet your requirements, you can create a custom pipe. A custom
+                            pipe is a class decorated with <code>@Pipe</code> that implements the
+                            <code>PipeTransform</code> interface. This
+                            interface requires a <code>transform</code> method, which takes the input value and optional
+                            arguments,
+                            returning the transformed result.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'appTruncate',
+  standalone: true
+})
+export class TruncatePipe implements PipeTransform {
+  // value: the data being piped in
+  // limit: the first argument passed after the colon
+  transform(value: string, limit: number = 20, suffix: string = '...'): string {
+    if (!value) return '';
+    return value.length &gt; limit 
+      ? value.substring(0, limit) + suffix 
+      : value;
+  }
+}
+</code></pre>
+                        <p class="h5">Usage in HTML:</p>
+                        <pre><code class="language-html">
+&lt;p&gt;{{ longDescription | appTruncate:50:' [Read More]' }}&lt;/p&gt;
+</code></pre>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p> The <code>AsyncPipe</code> is one of the most important pipes in Angular. It
+                                    automatically
+                                    subscribes to an Observable or Promise and returns the latest value it has emitted.
+                                    When the component is destroyed, it automatically unsubscribes to prevent memory
+                                    leaks.</p>
+                            </div>
+                        </div>
+                        <p class="h5">Pure vs. Impure Pipes</p>
+                        <p>By default, pipes are pure. A pure pipe is only executed when Angular detects a "pure change"
+                            to the input value. A pure change is either a change to a primitive input value (String,
+                            Number, Boolean) or a changed object reference (Array, Object).
+                        </p>
+                        <p>If you mutate an internal property of an object or push an item into an array, a pure pipe
+                            will not re-execute because the reference remains the same. An impure pipe, however, is
+                            executed during every change detection cycle, regardless of whether the inputs changed.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Aspect</th>
+                                        <th scope="col">Pure Pipe (Default)</th>
+                                        <th scope="col">Impure Pipe</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Execution</th>
+                                        <td>Only when input reference changes.</td>
+                                        <td>Every change detection cycle.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Performance</th>
+                                        <td>High (optimized).</td>
+                                        <td>Potentially Low (can slow down UI).</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">State</th>
+                                        <td>Should be stateless.</td>
+                                        <td>Can be stateful.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Use Case</th>
+                                        <td>Formatting, simple math.</td>
+                                        <td>Filtering arrays (where items change).</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>To make a pipe impure, set the <code>pure</code> flag to <code>false</code> in the decorator:
+                            <code>@Pipe({ name: 'myPipe',
+                            pure: false })</code>.
+                        </p>
+                        <p>Warning: Avoid heavy computations or HTTP requests inside a pipe's <code>transform</code>
+                            method. Because
+                            pipes are called frequently within the template (especially if they are impure), expensive
+                            logic can lead to severe UI lag and frame drops. For complex data processing, perform the
+                            logic in the component's TypeScript class or a Service.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-4-5">
                         <p class="h3">Creating Custom Pipes</p>
-                        <p>Content goes here...</p>
+                        <p>Custom pipes allow you to encapsulate reusable data transformation logic that isn't covered
+                            by Angular's built-in set. Whether you need to format a specific business ID, mask sensitive
+                            data, or perform complex string manipulation, custom pipes keep your templates clean and
+                            your component logic focused on state management rather than formatting.
+                        </p>
+                        <p>A custom pipe is a TypeScript class decorated with the <code>@Pipe</code> decorator. To
+                            ensure type safety
+                            and proper integration, the class must implement the <code>PipeTransform</code> interface.
+                        </p>
+                        <p class="h5">The Anatomy of a Custom Pipe</p>
+                        <p>The core of a pipe is the <code>transform</code> method. This method accepts the value to be
+                            transformed
+                            as its first argument, followed by any optional parameters.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'appInitials',      // The name used in templates: {{ name | appInitials }}
+  standalone: true          // Allows direct import without NgModules
+})
+export class InitialsPipe implements PipeTransform {
+  /**
+   * @param value The input string to transform
+   * @param limit Optional parameter to limit number of initials returned
+   */
+  transform(value: string, limit: number = 2): string {
+    if (!value) return '';
+
+    return value
+      .split(' ')
+      .map(word =&gt; word[0])
+      .join('')
+      .toUpperCase()
+      .substring(0, limit);
+  }
+}
+</code></pre>
+                        <p class="h5">Registering and Using the Pipe</p>
+                        <p>In modern Angular, you use the <code>standalone: true</code> property. To use the pipe, you
+                            must add it to
+                            the <code>imports</code> array of the component where you intend to use it.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Component Step</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Import Class</th>
+                                        <td>
+                                            <code>import { InitialsPipe } from './initials.pipe';</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Declare Usage</th>
+                                        <td>
+                                            Add <code>InitialsPipe</code> to the
+                                            <code>@Component({ imports: [...] })</code> array.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Apply in View</th>
+                                        <td>
+                                            Use the <code>|</code> pipe operator in your template.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Example Usage:</p>
+                        <pre><code class="language-html">
+&lt;div class="avatar"&gt;{{ user.fullName | appInitials }}&lt;/div&gt;
+
+&lt;span&gt;{{ jobTitle | appInitials:3 }}&lt;/span&gt;
+</code></pre>
+                        <p class="h5">Handling Complex Data Types</p>
+                        <p>Pipes aren't limited to strings. They can handle objects and arrays. For instance, a common
+                            use case is a pipe that extracts a specific property from an object or filters an array
+                            based on a criteria.
+                        </p>
+                        <pre><code class="language-javascript">
+@Pipe({
+  name: 'appPluck',
+  standalone: true
+})
+export class PluckPipe implements PipeTransform {
+  transform(objects: any[], key: string): any[] {
+    return objects.map(obj =&gt; obj[key]);
+  }
+}
+</code></pre>
+                        <p class="h5">Best Practices for Custom Pipes</p>
+                        <p>To maintain application performance and code quality, follow these guidelines when building
+                            custom pipes:
+                        </p>
+                        <ul>
+                            <li>Single Responsibility: Each pipe should do one thing well (e.g., formatting a phone
+                                number).
+                            </li>
+                            <li>Handle Nulls: Always include a check for <code>null</code> or <code>undefined</code>
+                                values at the beginning of
+                                your <code>transform</code> method to prevent runtime errors.
+                            </li>
+                            <li>Type Safety: Use TypeScript generics or specific types for the <code>value</code> and
+                                return type of
+                                the <code>transform</code> method.
+                            </li>
+                            <li>Stay Pure: Keep pipes "pure" (default) whenever possible. Pure pipes are only
+                                re-executed when the input reference changes, which is significantly better for
+                                performance.
+                            </li>
+                        </ul>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>If you find yourself needing to inject a service into a pipe (e.g., a translation
+                                    service), you can do so via the constructor. However, ensure the pipe remains
+                                    performant, as it will be called frequently during change detection.</p>
+                            </div>
+                        </div>
+                        <p class="h5">Technical Comparison: Pipe vs. Component Method</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Feature</th>
+                                        <th scope="col">Custom Pipe</th>
+                                        <th scope="col">Component Method</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Reusability</th>
+                                        <td>Highly reusable across any component.</td>
+                                        <td>Restricted to the host component.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Performance</th>
+                                        <td>Optimized; pure pipes skip re-execution if inputs match.</td>
+                                        <td>Re-executes on every change detection cycle.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Readability</th>
+                                        <td>Declarative and clean in templates.</td>
+                                        <td>Can clutter templates with logic calls.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>Warning: Do not use pipes to filter or sort large arrays if the pipe is marked as
+                            <code>pure: false</code>
+                            (impure). Because impure pipes run on every change detection cycle, sorting a list of 1,000
+                            items multiple times per second will freeze the browser UI. In such cases, perform the
+                            sorting in the component logic using Signals or RxJS.
+                        </p>
                     </section>
                 </article>
 
@@ -3774,19 +4703,590 @@ updateUserImmutable() {
                     <hr>
                     <section class="docs-section" id="item-5-1">
                         <p class="h3">Understanding DI</p>
-                        <p>Content goes here...</p>
+                        <p>Dependency Injection (DI) is a core design pattern in Angular and a fundamental pillar of its
+                            architecture. In simple terms, DI is a coding pattern in which a class asks for dependencies
+                            from external sources rather than creating them itself. Instead of a component manually
+                            instantiating a service (e.g., <code>const service = new DataService()</code>), Angular's DI
+                            system
+                            "injects" the instance into the component.
+                        </p>
+                        <p>This approach promotes decoupling, making your code more modular, easier to test, and more
+                            maintainable. By centralizing how objects are created, Angular can manage the lifecycle of
+                            services and share single instances across multiple components.
+                        </p>
+                        <p class="h5">The Three Pillars of Angular DI</p>
+                        <p>To understand how DI works in Angular, you must distinguish between the three main roles in
+                            the process:
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Role</th>
+                                        <th scope="col">Responsibility</th>
+                                        <th scope="col">Analogy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><strong>The Dependency</strong></th>
+                                        <td>The object or service that needs to be used (the "What").</td>
+                                        <td>The Tool</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><strong>The Provider</strong></th>
+                                        <td>A set of instructions telling the DI system how to create the dependency.
+                                        </td>
+                                        <td>The Instruction Manual</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><strong>The Injector</strong></th>
+                                        <td>The container that holds the instances and delivers them to classes.</td>
+                                        <td>The Tool Distributor</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Providing a Service</p>
+                        <p>In modern Angular, the preferred way to provide a service is using the
+                            <code>providedIn: 'root'</code> metadata. This makes the service a Singleton, meaning only
+                            one instance of the service
+                            exists for the entire application. It also enables tree-shaking, which ensures the service
+                            is excluded from the final production bundle if it is never used.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root' // Tells Angular to provide this at the root level
+})
+export class LoggerService {
+  log(message: string) {
+    console.log(`[LOG]: ${message}`);
+  }
+}
+</code></pre>
+                        <p class="h5">Injecting a Dependency</p>
+                        <p>There are two primary ways to inject a dependency into an Angular component or directive:
+                        </p>
+                        <p class="h5">1. Constructor Injection (Traditional)</p>
+                        <p>This is the classic approach where you declare the dependency as a private parameter in the
+                            class constructor.</p>
+                        <pre><code class="language-javascript">
+export class MyComponent {
+  constructor(private logger: LoggerService) {
+    this.logger.log('Component initialized via Constructor DI');
+  }
+}
+</code></pre>
+                        <p class="h5">2. The <code>inject()</code> Function (Modern)</p>
+                        <p>Introduced in recent versions, the <code>inject()</code> function allows you to inject
+                            dependencies at the field level. This is often cleaner, especially when using functional
+                            features or inheritance.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component, inject } from '@angular/core';
+
+export class MyComponent {
+  private logger = inject(LoggerService); // Cleaner field-level injection
+
+  init() {
+    this.logger.log('Component initialized via inject()');
+  }
+}
+</code></pre>
+                        <p class="h5">Hierarchical Injection (The Injector Tree)</p>
+                        <p>Angular’s DI system is hierarchical. If a dependency isn't found in a component's local
+                            injector, Angular looks up to the parent component's injector, and so on, until it reaches
+                            the Root Injector.
+                        </p>
+                        <ul>
+                            <li>Root Level: Service is a singleton shared by all.
+                            </li>
+                            <li>Component Level: Service is private to that component and its children; a new instance
+                                is created for every instance of the component.
+                            </li>
+                        </ul>
+                        <p class="h5">Benefits of Using DI</p>
+                        <ul>
+                            <li>Testability: You can easily swap a real service with a "Mock" or "Spy" during unit
+                                testing without changing the component code.
+                            </li>
+                            <li>Reusability: Services can be reused across different components, reducing code
+                                duplication.
+                            </li>
+                            <li>Memory Management: Angular handles the creation and destruction of service instances
+                                automatically.
+                            </li>
+                        </ul>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>Most services should be provided in <code> 'root'</code>. Only provide a service at
+                                    the component level if you explicitly need a fresh, isolated instance of that
+                                    service for every instance of that component.</p>
+                            </div>
+                        </div>
+                        <p>Warning: Avoid creating circular dependencies (e.g., Service A injects Service B, and Service
+                            B injects Service A). This will lead to a runtime error. If you encounter this, it is
+                            usually a sign that common logic should be extracted into a third, shared service.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-5-2">
                         <p class="h3">Creating Injectable Services</p>
-                        <p>Content goes here...</p>
+                        <p>In Angular, a Service is a class with a narrow, well-defined purpose. While components are
+                            responsible for the UI and user experience, services are responsible for "everything
+                            else"—fetching data from a server, validating user input, or logging messages to a console.
+                            By moving this logic into services, you make your components lean and focused solely on
+                            presenting data.
+                        </p>
+                        <p>To make a class "injectable" (capable of being managed by the DI system), you must decorate
+                            it with the <code>@Injectable()</code> decorator.
+                        </p>
+                        <p class="h5">Anatomy of a Service</p>
+                        <p>A service is a standard TypeScript class. The <code>@Injectable()</code> decorator provides
+                            metadata that
+                            tells Angular this class can be used by the Dependency Injection system. The
+                            <code>providedIn</code>
+                            property determines the scope of the service.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root' // Available globally as a singleton
+})
+export class DataService {
+  private items: string[] = ['Angular', 'Signals', 'RxJS'];
+
+  getItems(): string[] {
+    return this.items;
+  }
+
+  addItem(newItem: string): void {
+    this.items.push(newItem);
+  }
+}
+</code></pre>
+                        <p class="h5">Scoping Your Services</p>
+                        <p>Where you "provide" a service changes its lifecycle and visibility. Understanding scope is
+                            critical for managing application state correctly.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Scope</th>
+                                        <th scope="col">Configuration</th>
+                                        <th scope="col">Lifecycle</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><strong>Global (Root)</strong></th>
+                                        <td><code>providedIn: 'root'</code></td>
+                                        <td>Created once (Singleton) and lasts for the entire app session. Supports
+                                            tree-shaking.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><strong>Component</strong></th>
+                                        <td>
+                                            <code>providers: [MyService]</code><br>
+                                            in <code>@Component</code>
+                                        </td>
+                                        <td>Created when the component is initialized; destroyed when the component is
+                                            destroyed.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><strong>Lazy Module</strong></th>
+                                        <td><code>providedIn: 'any'</code></td>
+                                        <td>A separate instance is created for every lazy-loaded module that injects it.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Consuming a Service</p>
+                        <p>Once a service is created and provided, a component can "consume" it by requesting it. The
+                            most modern and flexible way to do this is using the <code>inject()</code> function.
+                        </p>
+                        <pre><code class="language-javascript">
+import { Component, inject } from '@angular/core';
+import { DataService } from './data.service';
+
+@Component({
+  selector: 'app-item-list',
+  standalone: true,
+  template: `
+    &lt;ul&gt;
+      @for (item of items; track item) {
+        &lt;li&gt;{{ item }}&lt;/li&gt;
+      }
+    &lt;/ul&gt;
+  `
+})
+export class ItemListComponent {
+  // Injecting the service
+  private dataService = inject(DataService);
+  
+  // Accessing service data
+  items = this.dataService.getItems();
+}
+</code></pre>
+                        <p class="h5">Services with Dependencies</p>
+                        <p>Services can also depend on other services. For example, a <code>UserService</code> might
+                            need the
+                            <code>HttpClient</code> to fetch data from an API. When injecting one service into another,
+                            the
+                            <code>@Injectable()</code> decorator is strictly required on the receiving class.
+                        </p>
+                        <pre><code class="language-javascript">
+@Injectable({ providedIn: 'root' })
+export class UserService {
+  // A service injecting another service (HttpClient)
+  private http = inject(HttpClient);
+
+  getUsers() {
+    return this.http.get('/api/users');
+  }
+}
+</code></pre>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>Even if a service doesn't currently have dependencies, it is a best practice to
+                                    always include the <code>@Injectable()</code> decorator. This ensures that if you
+                                    add dependencies later, the DI system is already configured to handle them.</p>
+                            </div>
+                        </div>
+                        <p class="h5">Best Practices for Services</p>
+                        <ul>
+                            <li>Keep it Stateless: Whenever possible, services should be stateless (functional). If a
+                                service must hold state, consider using Signals within the service to make that state
+                                reactive.
+                            </li>
+                            <li>Single Responsibility: A <code>LoggingService</code> should only log; it shouldn't also
+                                be
+                                responsible for user authentication.
+                            </li>
+                            <li>Tree-shakable Providers: Always prefer <code>providedIn: 'root'</code> over adding
+                                services to a
+                                <code>providers</code> array in a module, as this allows the Angular compiler to remove
+                                the service
+                                if it's never used, reducing your bundle size.
+                            </li>
+                        </ul>
+                        <p>Warning: Never use the <code>new</code> keyword to create an instance of a service (e.g.,
+                            <code>const s = new
+                            DataService()</code>) inside a component. Doing so bypasses Angular's DI system, meaning
+                            the
+                            service won't have access to other injected dependencies (like <code>HttpClient</code>) and
+                            you lose the
+                            ability to easily mock the service for testing.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-5-3">
                         <p class="h3">Hierarchical Injectors</p>
-                        <p>Content goes here...</p>
+                        <p>Angular’s Dependency Injection system is hierarchical. This means that injectors are
+                            organized in a tree structure that parallels your component tree. When a component requests
+                            a dependency, Angular doesn't just look in one place; it starts at the component's local
+                            injector and bubbles up through the parent injectors until it finds a provider or reaches
+                            the root.
+                        </p>
+                        <p>This hierarchy allows you to control the visibility and lifecycle of your services, enabling
+                            patterns like shared singletons, isolated state, or specialized overrides for specific
+                            branches of your UI.
+                        </p>
+                        <p class="h5">The Two Injector Hierarchies</p>
+                        <p>Angular actually maintains two distinct injector trees. Understanding the difference is key
+                            to advanced architecture:
+                        </p>
+                        <ol>
+                            <li>Environment Injector Hierarchy: This contains services provided at the "Root" level or
+                                within loaded routes/modules. These are typically application-wide singletons.
+                            </li>
+                            <li>Element Injector Hierarchy: This is created dynamically for every DOM element
+                                (components and directives). This is where "Component-level" services live.
+                            </li>
+                        </ol>
+                        <p class="h5">Resolution Rules</p>
+                        <p>When a component or directive requests a dependency, Angular follows a strict lookup path:
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Order</th>
+                                        <th scope="col">Injector Level</th>
+                                        <th scope="col">Behavior</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td><strong>Element Injector</strong></td>
+                                        <td>Looks at the current component's <code>providers</code> array.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td><strong>Parent Element</strong></td>
+                                        <td>Searches up the DOM tree through parent components.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td><strong>Environment/Root</strong></td>
+                                        <td>Searches the application-wide providers (e.g.,
+                                            <code>providedIn: 'root'</code>).
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">4</th>
+                                        <td><strong>Null Injector</strong></td>
+                                        <td>If still not found, Angular throws a "No provider found" error (unless
+                                            marked optional).</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Use Cases for Hierarchical DI</p>
+                        <p>While <code>providedIn: 'root'</code> is the standard for 90% of services, providing services
+                            at the
+                            component level is powerful for specific scenarios:
+                        </p>
+                        <ul>
+                            <li>State Isolation: If you have a complex <code>FileEditorComponent</code>, you might
+                                provide a
+                                <code>SelectionService</code> at the component level. Every time you open a new editor
+                                tab, it gets
+                                its own fresh, isolated instance of the service.
+                            </li>
+                            <li>Component-Specific Configuration: Providing a configuration service at a parent level to
+                                modify the behavior of all its children.
+                            </li>
+                            <li>Encapsulation: Keeping services private to a specific UI feature so they aren't
+                                accessible (or accidentally modified) by the rest of the app.
+                            </li>
+                        </ul>
+                        <pre><code class="language-javascript">
+@Component({
+  selector: 'app-parent',
+  standalone: true,
+  // This service is now unique to this instance of Parent and its children
+  providers: [LocalStateService], 
+  template: `&lt;app-child&gt;&lt;/app-child&gt;`
+})
+export class ParentComponent {}
+</code></pre>
+                        <p class="h5">Resolution Modifiers</p>
+                        <p>You can control how Angular searches the hierarchy using Resolution Modifiers. These are
+                            decorators (or options in <code>inject()</code>) that tell the DI system to stop searching
+                            or handle missing providers gracefully.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Modifier</th>
+                                        <th scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row"><code>@Optional()</code></th>
+                                        <td>Returns <code>null</code> instead of throwing an error if the provider is
+                                            missing.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>@Self()</code></th>
+                                        <td>Only looks in the local element injector; does not bubble up.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>@SkipSelf()</code></th>
+                                        <td>Starts the search at the parent injector, ignoring the local one.</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><code>@Host()</code></th>
+                                        <td>Stops the search at the "Host" component (the boundary of the current
+                                            template).</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">Modern Syntax Example:</p>
+                        <pre><code class="language-javascript">
+// Using the inject() function with modifiers
+private localService = inject(LocalService, { self: true, optional: true });
+</code></pre>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>When a service is provided in a component's <code>providers</code> array, that
+                                    service instance is
+                                    tied to the component's lifecycle. When the component is destroyed, the service
+                                    instance is also destroyed, triggering its <code>ngOnDestroy</code> hook if it
+                                    implements it.</p>
+                            </div>
+                        </div>
+                        <p>Warning: Be careful not to accidentally provide a service in multiple places. If you have a
+                            service marked <code>providedIn: 'root'</code> but also list it in a component's
+                            <code>providers: []</code> array, that
+                            component (and its children) will receive a new, separate instance, potentially causing bugs
+                            if you expected a global singleton.
+                        </p>
                     </section>
+
                     <section class="docs-section" id="item-5-4">
                         <p class="h3">Injection Tokens & Providers</p>
-                        <p>Content goes here...</p>
+                        <p>While most dependencies in Angular are classes (like services), there are many situations
+                            where you need to inject things that aren't classes—such as configuration objects, constant
+                            strings, or external API keys. Furthermore, you may want to swap the implementation of a
+                            service without changing the code of the components that use it. Injection Tokens and
+                            Providers give you the power to define exactly what is injected and how it is created.
+                        </p>
+                        <p class="h5">1. Injection Tokens</p>
+                        <p>An <code>InjectionToken</code> is an object used as a lookup key in the DI system when the
+                            dependency is
+                            not a class. Since interfaces do not exist at runtime in JavaScript, you cannot use them as
+                            DI tokens. Instead, you create an <code>InjectionToken</code> to represent that dependency.
+                        </p>
+                        <pre><code class="language-javascript">
+import { InjectionToken } from '@angular/core';
+
+// 1. Define the shape of the dependency
+export interface AppConfig {
+  apiUrl: string;
+  retryCount: number;
+}
+
+// 2. Create the token
+export const APP_CONFIG = new InjectionToken&lt;AppConfig&gt;('app.config');
+</code></pre>
+                        <p class="h5">Usage:</p>
+                        <pre><code class="language-javascript">
+// Injecting the token using the inject() function
+const config = inject(APP_CONFIG);
+</code></pre>
+                        <p class="h5">2. Provider Recipes</p>
+                        <p>When you provide a dependency, you are giving the DI system a "recipe." While the shorthand
+                            <code>providers: [MyService]</code> is common, the expanded object syntax reveals the full
+                            flexibility of the system.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Provider Key</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Use Case</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>useClass</code></td>
+                                        <td>Instantiates a specific class.</td>
+                                        <td>Swapping a real service for a Mock version.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>useValue</code></td>
+                                        <td>Uses a static value or object.</td>
+                                        <td>Injecting configuration constants or API keys.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>useExisting</code></td>
+                                        <td>Maps one token to another existing token.</td>
+                                        <td>Creating an alias for an existing service.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>useFactory</code></td>
+                                        <td>Uses a function to create the dependency.</td>
+                                        <td>Dynamic creation based on other services.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="h5">useClass: Swapping Implementations</p>
+                        <pre><code class="language-javascript">
+providers: [
+  { provide: LoggerService, useClass: AdvancedLoggerService }
+]
+// Any component asking for LoggerService now gets AdvancedLoggerService.
+</code></pre>
+                        <p class="h5">useValue: Injecting Constants</p>
+                        <pre><code class="language-javascript">
+providers: [
+  { provide: APP_CONFIG, useValue: { apiUrl: 'https://api.v1.com', retryCount: 3 } }
+]
+</code></pre>
+                        <p class="h5">useFactory: Dynamic Dependencies</p>
+                        <p>Sometimes you need logic to decide how a service is built. <code>useFactory</code> takes a
+                            function and an
+                            optional <code>deps</code> array of other dependencies that the factory needs.
+                        </p>
+                        <pre><code class="language-javascript">
+providers: [
+  {
+    provide: DATA_SERVICE,
+    useFactory: (http: HttpClient) =&gt; {
+      return isDevMode() ? new DevDataService(http) : new ProdDataService(http);
+    },
+    deps: [HttpClient]
+  }
+]
+</code></pre>
+                        <p class="h5">3. Multi-Providers</p>
+                        <p>By default, a provider replaces any previous provider for the same token. However, if you set
+                            <code>multi: true</code>, Angular will instead collect all provided values for that token
+                            into an array. This is how Angular handles "plug-in" architectures, like HTTP Interceptors.
+                        </p>
+                        <pre><code class="language-javascript">
+providers: [
+  { provide: APP_INITIALIZER, useValue: () =&gt; console.log('Init 1'), multi: true },
+  { provide: APP_INITIALIZER, useValue: () =&gt; console.log('Init 2'), multi: true }
+]
+// APP_INITIALIZER now injects as an array: [fn1, fn2]
+</code></pre>
+                        <div class="callout-block callout-block-info">
+                            <div class="content">
+                                <h4 class="callout-title">
+                                    <span class="callout-icon-holder me-1">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    Note
+                                </h4>
+                                <p>When using <code>InjectionToken</code>, you can also provide it at the root level
+                                    directly within the token definition. This is the modern, tree-shakable way to
+                                    provide constants.</p>
+                            </div>
+                        </div>
+                        <pre><code class="language-javascript">
+export const API_URL = new InjectionToken&lt;string&gt;('api', {
+  providedIn: 'root',
+  factory: () =&gt; 'https://api.example.com'
+});
+</code></pre>
+                        <p>Warning: Always use <code>InjectionToken</code> for strings or objects. Never use a plain
+                            string as a provider key (e.g.,
+                            <code>{ provide: 'API_URL', ... }</code>). String tokens can cause name collisions if two
+                            different parts of your app (or a third-party library) use the same string, leading to
+                            hard-to-debug "last-one-wins" errors.
+                        </p>
                     </section>
                 </article>
 
