@@ -712,8 +712,7 @@
                             decorator, which
                             provides the necessary metadata to the Angular compiler. This metadata informs Angular where
                             to find the HTML template and styles, and what selector to use for the custom element.</p>
-                        <pre><code class="language-javascript">                     
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -798,8 +797,7 @@ export class AppComponent {
                             the build process provides faster rendering in the browser because the browser does not need
                             to compile the templates on the fly. This process also detects template errors at build
                             time, preventing runtime crashes.</p>
-                        <pre><code class="language-bash">
-# To build an Angular application with AOT enabled (default in production)
+                        <pre><code class="language-bash"># To build an Angular application with AOT enabled (default in production)
 ng build --configuration production
 </code></pre>
                         <p>When you execute this command, the Angular CLI utilizes the TypeScript compiler and the
@@ -863,8 +861,7 @@ ng build --configuration production
                             on your machine.
                         </p>
 
-                        <pre><code class="language-bash">
-# Install the Angular CLI globally
+                        <pre><code class="language-bash"># Install the Angular CLI globally
 npm install -g @angular/cli
 
 # Verify the installation and check the version
@@ -891,8 +888,7 @@ ng version
                             of your application. You will be asked to choose a stylesheet format (such as CSS, SCSS, or
                             Sass) and whether you wish to enable Server-Side Rendering (SSR) and Static Site Generation
                             (SSG).</p>
-                        <pre><code class="language-bash">
-# Create a new project named 'my-tech-docs'
+                        <pre><code class="language-bash"># Create a new project named 'my-tech-docs'
 ng new my-tech-docs
 </code></pre>
                         <p class="h5">When this command runs, the CLI performs several automated tasks:</p>
@@ -956,8 +952,7 @@ ng new my-tech-docs
                             local web server (usually at <code>http://localhost:4200</code>), and watches the source
                             files for changes.
                         </p>
-                        <pre><code class="language-bash">
-# Navigate into the project folder
+                        <pre><code class="language-bash"># Navigate into the project folder
 cd my-tech-docs
 
 # Launch the development server and open it in your default browser
@@ -993,12 +988,11 @@ ng serve --open
                             metadata to a
                             standard TypeScript class, telling Angular how that class should behave. The
                             <code>selector</code>
-                            property defines the custom HTML tag (e.g., <code>< app-root ></code>) that represents the
+                            property defines the custom HTML tag (e.g., <code>&lt;app-root&gt;</code>) that represents the
                             component, while
                             the <code>template</code> property contains the HTML structure.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -1090,11 +1084,10 @@ bootstrapApplication(AppComponent)
   .catch((err) =&gt; console.error(err));</code></pre>
                         <p>The <code>index.html</code> file contains a placeholder tag that matches the
                             <code>selector</code> defined in your component. When the application starts, Angular
-                            replaces <code>< app-root ></code> with the rendered HTML from your
+                            replaces <code>&lt;app-root&gt;&lt;/app-root&gt;</code> with the rendered HTML from your
                             <code>AppComponent</code>.
                         </p>
-                        <pre><code class="language-html">
-&lt;!doctype html&gt;
+                        <pre><code class="language-html">&lt;!doctype html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
   &lt;meta charset="utf-8"&gt;
@@ -1265,8 +1258,7 @@ bootstrapApplication(AppComponent)
                             <code>projects</code> object
                             contains the settings for each individual application or library in the workspace.
                         </p>
-                        <pre><code class="language-json">
-{
+                        <pre><code class="language-json">{
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
@@ -1361,10 +1353,9 @@ bootstrapApplication(AppComponent)
                             optimization, removes source maps for smaller bundle sizes, and uses file hashing. You can
                             trigger these configurations by passing the <code>--configuration</code> flag to the CLI.
                         </p>
-                        <pre><code class="language-bash">
-# Build using the 'production' configuration defined in angular.json
+                        <pre><code class="language-bash"># Build using the 'production' configuration defined in angular.json
 ng build --configuration production
-                        </code></pre>
+</code></pre>
                         <p>When you run <code>ng serve</code>, the CLI actually references the <code>serve</code> target
                             in <code>angular.json</code>, which by
                             default uses the <code>development</code> configuration of the <code>build</code> target to
@@ -1375,7 +1366,6 @@ ng build --configuration production
                             application. Always verify the file structure after moving or renaming core files like
                             <code>main.ts</code> or <code>index.html</code>.
                         </p>
-
                     </section>
                 </article>
 
@@ -1410,8 +1400,7 @@ ng build --configuration production
                             directly into the component's metadata. This consolidation creates a clear, traceable link
                             between the UI and its required logic.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 
@@ -1515,8 +1504,7 @@ export class DashboardComponent {
                             <code>provideHttpClient</code> functions to
                             set up global services that were previously configured in modules.
                         </p>
-                        <pre><code class="language-javascript">
-import { bootstrapApplication } from '@angular/platform-browser';
+                        <pre><code class="language-javascript">import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
@@ -1607,8 +1595,7 @@ bootstrapApplication(AppComponent, {
                             compiler for the logic to work, implementing the interface is a best practice for TypeScript
                             type safety.
                         </p>
-                        <pre><code class="language-javascript">
-import { 
+                        <pre><code class="language-javascript">import { 
   Component, 
   OnInit, 
   OnChanges, 
@@ -1720,8 +1707,7 @@ export class LifecycleDemoComponent implements OnInit, OnChanges, OnDestroy {
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript>">
-import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+                        <pre><code class="language-javascript>">import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-dom-ref',
@@ -1768,8 +1754,7 @@ export class DomRefComponent implements AfterViewInit {
                             for HTML attributes that require non-string data types.
                         </p>
 
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-interpolation-demo',
@@ -1802,8 +1787,7 @@ export class InterpolationComponent {
                             disabling a button, setting a source for an image, or passing data into a child component's
                             <code>@Input</code>.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-property-binding',
@@ -1897,8 +1881,7 @@ export class PropertyBindingComponent {
                                 Use <code>[class.name]</code> or <code>[style.width]</code>.
                             </li>
                         </ul>
-                        <pre><code class="language-javascript">
-@Component({
+                        <pre><code class="language-javascript">@Component({
   selector: 'app-special-bindings',
   standalone: true,
   template: `
@@ -1941,8 +1924,7 @@ export class SpecialBindingsComponent {
                             the need for complex
                             <code>ng-template</code> references.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-auth-display',
@@ -2015,8 +1997,7 @@ export class AuthDisplayComponent {
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-product-list',
@@ -2051,8 +2032,7 @@ export class ProductListComponent {
                             found, the
                             <code>@default</code> block is rendered.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-status-stepper',
@@ -2126,8 +2106,7 @@ export class StatusStepperComponent {
                         <p>If you are working on an older Angular project and wish to upgrade to the new control flow,
                             the Angular CLI provides an automated migration tool.
                         </p>
-                        <pre><code class="language-bash">
-# Run this command to migrate your project to the new control flow syntax
+                        <pre><code class="language-bash"># Run this command to migrate your project to the new control flow syntax
 ng generate @angular/core:control-flow
 </code></pre>
                         <p class="h5">Edge Case: Null/Undefined Collections</p>
@@ -2167,8 +2146,7 @@ ng generate @angular/core:control-flow
                             event, such as the
                             <code>KeyboardEvent</code>or <code>MouseEvent</code> properties.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-click-logger',
@@ -2239,8 +2217,7 @@ export class ClickLoggerComponent {
                             <code>StoreComponent</code> (parent) that a product has been added to the cart.
                         </p>
                         <p class="h5">Child Component:</p>
-                        <pre><code class="language-javascript">
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-item-detail',
@@ -2263,8 +2240,7 @@ export class ItemDetailComponent {
 }
 </code></pre>
                         <p class="h5">Parent Component Template:</p>
-                        <pre><code class="language-html">
-&lt;app-item-detail 
+                        <pre><code class="language-html">&lt;app-item-detail 
   [itemName]="'Wireless Mouse'" 
   (itemAdded)="handleItem($event)"&gt;
 &lt;/app-item-detail&gt;
@@ -2368,8 +2344,7 @@ export class ItemDetailComponent {
                             updates the
                             class property, and pushes the property value back into the input element's property.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Required for ngModel
 
 @Component({
@@ -2409,7 +2384,7 @@ export class UserSettingsComponent {
     this.bio = '';
   }
 }
-                    </code></pre>
+</code></pre>
                         <p class="h5">Deconstructing the Syntax</p>
                         <p>The <code>[(ngModel)]</code> syntax is actually a syntactic sugar for a longer form.
                             Understanding this deconstruction is helpful when you need to perform additional logic (like
@@ -2444,8 +2419,7 @@ export class UserSettingsComponent {
                             </table>
                         </div>
                         <p class="h5">The Expanded Version:</p>
-                        <pre><code class="language-html">
-&lt;input [ngModel]="username" (ngModelChange)="username = $event"&gt;
+                        <pre><code class="language-html">&lt;input [ngModel]="username" (ngModelChange)="username = $event"&gt;
 </code></pre>
                         <p class="h5">Usage with Different Form Elements</p>
                         <p>The <code>ngModel</code> directive is versatile and adapts its behavior based on the type of
@@ -2579,8 +2553,7 @@ export class UserSettingsComponent {
                             component's template. When the parent component uses the child, any elements placed inside
                             the child's tags will be "projected" into that exact spot.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-simple-card',
@@ -2599,8 +2572,7 @@ import { Component } from '@angular/core';
 export class SimpleCardComponent {}
 </code></pre>
                         <p class="h5">Usage in Parent:</p>
-                        <pre><code class="language-html">
-&lt;app-simple-card&gt;
+                        <pre><code class="language-html">&lt;app-simple-card&gt;
   &lt;p&gt;This paragraph is projected into the card body.&lt;/p&gt;
 &lt;/app-simple-card&gt;
 </code></pre>
@@ -2644,8 +2616,7 @@ export class SimpleCardComponent {}
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-@Component({
+                        <pre><code class="language-javascript">@Component({
   selector: 'app-fancy-card',
   standalone: true,
   template: `
@@ -2666,8 +2637,7 @@ export class SimpleCardComponent {}
 export class FancyCardComponent {}
 </code></pre>
                         <p class="h5">Usage in Parent:</p>
-                        <pre><code class="language-html">
-&lt;app-fancy-card&gt;
+                        <pre><code class="language-html">&lt;app-fancy-card&gt;
   &lt;h2 header&gt;Project Title&lt;/h2&gt;
   
   &lt;p&gt;This is the main description of the project.&lt;/p&gt;
@@ -2705,8 +2675,7 @@ export class FancyCardComponent {}
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-import { Component, ContentChild, ElementRef, AfterContentInit } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, ContentChild, ElementRef, AfterContentInit } from '@angular/core';
 
 @Component({ selector: 'app-content-checker', standalone: true, template: `&lt;ng-content&gt;&lt;/ng-content&gt;` })
 export class ContentCheckerComponent implements AfterContentInit {
@@ -2832,8 +2801,7 @@ export class ContentCheckerComponent implements AfterContentInit {
                         <p>To change the default behavior, you must import <code>ViewEncapsulation</code> from
                             <code>@angular/core</code>.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component, ViewEncapsulation } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-encapsulation-demo',
@@ -2859,8 +2827,7 @@ export class EncapsulationComponent {}
                             Angular disables encapsulation for that specific rule, allowing the style to act globally or
                             "pierce" down into child components.
                         </p>
-                        <pre><code class="language-javascript">
-@Component({
+                        <pre><code class="language-javascript">@Component({
   selector: 'app-parent-styler',
   standalone: true,
   template: `&lt;app-third-party-widget&gt;&lt;/app-third-party-widget&gt;`,
@@ -2873,7 +2840,7 @@ export class EncapsulationComponent {}
   `]
 })
 export class ParentStylerComponent {}                        
-                        </code></pre>
+</code></pre>
                         <div class="callout-block callout-block-info">
                             <div class="content">
                                 <h4 class="callout-title">
@@ -2936,8 +2903,7 @@ export class ParentStylerComponent {}
                             <li>:host: Used to style the host element.
                             </li>
                         </ul>
-                        <pre><code class="language-css">
-/* Style the host only if it has the .active class */
+                        <pre><code class="language-css">/* Style the host only if it has the .active class */
 :host(.active) {
   border: 2px solid green;
 }
@@ -2954,7 +2920,6 @@ export class ParentStylerComponent {}
                             limit its scope to the current
                             component's children only.
                         </p>
-
                     </section>
                 </article>
 
@@ -2987,8 +2952,7 @@ export class ParentStylerComponent {}
                             <code>.update()</code> method
                             when the new value depends on the previous one.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component, signal } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-counter',
@@ -3059,8 +3023,7 @@ export class CounterComponent {
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-import { Component, signal, computed } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, signal, computed } from '@angular/core';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -3188,8 +3151,7 @@ export class ShoppingCartComponent {
                             field initializer. This is because effects are tied to the lifecycle of the object that
                             creates them; when the component is destroyed, the effect is automatically cleaned up.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component, signal, effect } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, signal, effect } from '@angular/core';
 
 @Component({
   selector: 'app-logger-demo',
@@ -3215,7 +3177,7 @@ export class LoggerComponent {
     this.count.update(c =&gt; c + 1);
   }
 }
-                        </code></pre>
+</code></pre>
                         <p class="h5">Effect Execution Timing</p>
                         <p>Effects do not run immediately when a signal changes. Instead, they are scheduled and run
                             during the microtask phase. This means that if you update a signal three times in a single
@@ -3256,8 +3218,7 @@ export class LoggerComponent {
                             provides an <code>onCleanup</code> callback as
                             an argument to handle these scenarios.
                         </p>
-                        <pre><code class="language-javascript">
-effect((onCleanup) =&gt; {
+                        <pre><code class="language-javascript">effect((onCleanup) =&gt; {
   const user = this.currentUser();
   
   const timer = setTimeout(() =&gt; {
@@ -3316,8 +3277,7 @@ effect((onCleanup) =&gt; {
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-export class ManualEffectComponent {
+                        <pre><code class="language-javascript">export class ManualEffectComponent {
   data = signal(null);
   
   // Storing the reference to the effect
@@ -3365,8 +3325,7 @@ export class ManualEffectComponent {
                             the signal is created and unsubscribes when the surrounding context (like a component or
                             service) is destroyed.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component, inject } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -3458,8 +3417,7 @@ export class UserListComponent {
                             asynchronously (during the microtask phase) rather than immediately when the signal's value
                             is set.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component, signal } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
@@ -3564,8 +3522,7 @@ export class SearchComponent {
                             Even if a specific component’s data has not changed, Angular will still execute its change
                             detection logic and re-evaluate its template expressions.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-default-cd',
@@ -3599,8 +3556,7 @@ export class DefaultComponent {
                             to <code>ChangeDetectionStrategy.OnPush</code>.
                         </p>
 
-                        <pre><code class="language-javascript">
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-on-push-cd',
@@ -3695,8 +3651,7 @@ export class OnPushComponent {
                             if the object reference has changed for <code>@Input</code> properties, mutating a property
                             inside an object will not trigger an update.
                         </p>
-                        <pre><code class="language-javascript">
-// PARENT COMPONENT LOGIC
+                        <pre><code class="language-javascript">// PARENT COMPONENT LOGIC
 user = { name: 'Alice' };
 
 // ❌ This will NOT trigger OnPush change detection in child
@@ -3775,8 +3730,7 @@ updateUserImmutable() {
                         <p>The most powerful usage is the Object Literal syntax, where the keys are the class names and
                             the values are the boolean conditions that determine whether that class should be applied.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -3821,8 +3775,7 @@ export class StatusBoxComponent {
                             data or user input, such as the width of a progress bar, the coordinates of a draggable
                             element, or a user-selected theme color.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -3977,8 +3930,7 @@ export class ProgressBarComponent {
                         <p>To interact with the host element, you typically inject ElementRef (to access the DOM
                             element) and Renderer2 (to perform DOM manipulations safely across different platforms).
                         </p>
-                        <pre><code class="language-javascript">
-import { Directive, ElementRef, Renderer2, OnInit, Input } from '@angular/core';
+                        <pre><code class="language-javascript">import { Directive, ElementRef, Renderer2, OnInit, Input } from '@angular/core';
 
 @Directive({
   selector: '[appHighlight]', // Attribute selector
@@ -4027,8 +3979,7 @@ export class HighlightDirective implements OnInit {
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-import { Directive, ElementRef, HostListener, Renderer2, Input } from '@angular/core';
+                        <pre><code class="language-javascript">import { Directive, ElementRef, HostListener, Renderer2, Input } from '@angular/core';
 
 @Directive({
   selector: '[appHoverShadow]',
@@ -4058,8 +4009,7 @@ export class HoverShadowDirective {
                             components. If you want to pass a value directly to the directive using its selector name,
                             you can alias the input property to match the selector.
                         </p>
-                        <pre><code class="language-javascript">
-// Inside the directive class
+                        <pre><code class="language-javascript">// Inside the directive class
 @Input('appHighlight') color = 'yellow';
 
 // Usage in HTML
@@ -4200,8 +4150,7 @@ export class HoverShadowDirective {
                             condition is
                             false.
                         </p>
-                        <pre><code class="language-javascript">
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+                        <pre><code class="language-javascript">import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 @Directive({
   selector: '[appUnless]',
@@ -4230,15 +4179,13 @@ export class UnlessDirective {
 }
 </code></pre>
                         <p class="h5">Usage in Template:</p>
-                        <pre><code class="language-html">
-&lt;p *appUnless="isLoggedIn"&gt;Please log in to see this content.&lt;/p&gt;
+                        <pre><code class="language-html">&lt;p *appUnless="isLoggedIn"&gt;Please log in to see this content.&lt;/p&gt;
 </code></pre>
                         <p class="h5">De-sugaring the Asterisk</p>
                         <p>It is critical to understand what Angular does behind the scenes when it encounters the *.
                             The example above is transformed by the compiler into the following expanded form:
                         </p>
-                        <pre><code class="language-html">
-&lt;ng-template [appUnless]="isLoggedIn"&gt;
+                        <pre><code class="language-html">&lt;ng-template [appUnless]="isLoggedIn"&gt;
   &lt;p&gt;Please log in to see this content.&lt;/p&gt;
 &lt;/ng-template&gt;
 </code></pre>
@@ -4280,16 +4227,14 @@ export class UnlessDirective {
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-// Inside a directive that provides the current time
+                        <pre><code class="language-javascript">// Inside a directive that provides the current time
 this.viewContainer.createEmbeddedView(this.templateRef, {
   $implicit: 'User123',
   time: new Date().toLocaleTimeString()
 });
 </code></pre>
                         <p class="h5">Usage:</p>
-                        <pre><code class="language-html">
-&lt;div *appUserTime="let user; let t = time"&gt;
+                        <pre><code class="language-html">&lt;div *appUserTime="let user; let t = time"&gt;
   Hello {{ user }}, the time is {{ t }}.
 &lt;/div&gt;
 </code></pre>
@@ -4404,8 +4349,7 @@ this.viewContainer.createEmbeddedView(this.templateRef, {
                             parameter value. If a pipe accepts multiple parameters, separate them with additional
                             colons. Furthermore, pipes can be chained to process data through a multi-stage pipeline.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -4435,8 +4379,7 @@ export class PipeDemoComponent {
                             arguments,
                             returning the transformed result.
                         </p>
-                        <pre><code class="language-javascript">
-import { Pipe, PipeTransform } from '@angular/core';
+                        <pre><code class="language-javascript">import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'appTruncate',
@@ -4542,8 +4485,7 @@ export class TruncatePipe implements PipeTransform {
                             transformed
                             as its first argument, followed by any optional parameters.
                         </p>
-                        <pre><code class="language-javascript">
-import { Pipe, PipeTransform } from '@angular/core';
+                        <pre><code class="language-javascript">import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'appInitials',      // The name used in templates: {{ name | appInitials }}
@@ -4603,8 +4545,7 @@ export class InitialsPipe implements PipeTransform {
                             </table>
                         </div>
                         <p class="h5">Example Usage:</p>
-                        <pre><code class="language-html">
-&lt;div class="avatar"&gt;{{ user.fullName | appInitials }}&lt;/div&gt;
+                        <pre><code class="language-html">&lt;div class="avatar"&gt;{{ user.fullName | appInitials }}&lt;/div&gt;
 
 &lt;span&gt;{{ jobTitle | appInitials:3 }}&lt;/span&gt;
 </code></pre>
@@ -4613,8 +4554,7 @@ export class InitialsPipe implements PipeTransform {
                             use case is a pipe that extracts a specific property from an object or filters an array
                             based on a criteria.
                         </p>
-                        <pre><code class="language-javascript">
-@Pipe({
+                        <pre><code class="language-javascript">@Pipe({
   name: 'appPluck',
   standalone: true
 })
@@ -4754,8 +4694,7 @@ export class PluckPipe implements PipeTransform {
                             exists for the entire application. It also enables tree-shaking, which ensures the service
                             is excluded from the final production bundle if it is never used.
                         </p>
-                        <pre><code class="language-javascript">
-import { Injectable } from '@angular/core';
+                        <pre><code class="language-javascript">import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root' // Tells Angular to provide this at the root level
@@ -4772,8 +4711,7 @@ export class LoggerService {
                         <p class="h5">1. Constructor Injection (Traditional)</p>
                         <p>This is the classic approach where you declare the dependency as a private parameter in the
                             class constructor.</p>
-                        <pre><code class="language-javascript">
-export class MyComponent {
+                        <pre><code class="language-javascript">export class MyComponent {
   constructor(private logger: LoggerService) {
     this.logger.log('Component initialized via Constructor DI');
   }
@@ -4784,8 +4722,7 @@ export class MyComponent {
                             dependencies at the field level. This is often cleaner, especially when using functional
                             features or inheritance.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component, inject } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, inject } from '@angular/core';
 
 export class MyComponent {
   private logger = inject(LoggerService); // Cleaner field-level injection
@@ -4856,8 +4793,7 @@ export class MyComponent {
                             <code>providedIn</code>
                             property determines the scope of the service.
                         </p>
-                        <pre><code class="language-javascript">
-import { Injectable } from '@angular/core';
+                        <pre><code class="language-javascript">import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root' // Available globally as a singleton
@@ -4916,8 +4852,7 @@ export class DataService {
                         <p>Once a service is created and provided, a component can "consume" it by requesting it. The
                             most modern and flexible way to do this is using the <code>inject()</code> function.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component, inject } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, inject } from '@angular/core';
 import { DataService } from './data.service';
 
 @Component({
@@ -4946,8 +4881,7 @@ export class ItemListComponent {
                             the
                             <code>@Injectable()</code> decorator is strictly required on the receiving class.
                         </p>
-                        <pre><code class="language-javascript">
-@Injectable({ providedIn: 'root' })
+                        <pre><code class="language-javascript">@Injectable({ providedIn: 'root' })
 export class UserService {
   // A service injecting another service (HttpClient)
   private http = inject(HttpClient);
@@ -5079,8 +5013,7 @@ export class UserService {
                                 accessible (or accidentally modified) by the rest of the app.
                             </li>
                         </ul>
-                        <pre><code class="language-javascript">
-@Component({
+                        <pre><code class="language-javascript">@Component({
   selector: 'app-parent',
   standalone: true,
   // This service is now unique to this instance of Parent and its children
@@ -5125,8 +5058,7 @@ export class ParentComponent {}
                             </table>
                         </div>
                         <p class="h5">Modern Syntax Example:</p>
-                        <pre><code class="language-javascript">
-// Using the inject() function with modifiers
+                        <pre><code class="language-javascript">// Using the inject() function with modifiers
 private localService = inject(LocalService, { self: true, optional: true });
 </code></pre>
                         <div class="callout-block callout-block-info">
@@ -5166,8 +5098,7 @@ private localService = inject(LocalService, { self: true, optional: true });
                             not a class. Since interfaces do not exist at runtime in JavaScript, you cannot use them as
                             DI tokens. Instead, you create an <code>InjectionToken</code> to represent that dependency.
                         </p>
-                        <pre><code class="language-javascript">
-import { InjectionToken } from '@angular/core';
+                        <pre><code class="language-javascript">import { InjectionToken } from '@angular/core';
 
 // 1. Define the shape of the dependency
 export interface AppConfig {
@@ -5222,15 +5153,13 @@ const config = inject(APP_CONFIG);
                             </table>
                         </div>
                         <p class="h5">useClass: Swapping Implementations</p>
-                        <pre><code class="language-javascript">
-providers: [
+                        <pre><code class="language-javascript">providers: [
   { provide: LoggerService, useClass: AdvancedLoggerService }
 ]
 // Any component asking for LoggerService now gets AdvancedLoggerService.
 </code></pre>
                         <p class="h5">useValue: Injecting Constants</p>
-                        <pre><code class="language-javascript">
-providers: [
+                        <pre><code class="language-javascript">providers: [
   { provide: APP_CONFIG, useValue: { apiUrl: 'https://api.v1.com', retryCount: 3 } }
 ]
 </code></pre>
@@ -5239,8 +5168,7 @@ providers: [
                             function and an
                             optional <code>deps</code> array of other dependencies that the factory needs.
                         </p>
-                        <pre><code class="language-javascript">
-providers: [
+                        <pre><code class="language-javascript">providers: [
   {
     provide: DATA_SERVICE,
     useFactory: (http: HttpClient) =&gt; {
@@ -5255,8 +5183,7 @@ providers: [
                             <code>multi: true</code>, Angular will instead collect all provided values for that token
                             into an array. This is how Angular handles "plug-in" architectures, like HTTP Interceptors.
                         </p>
-                        <pre><code class="language-javascript">
-providers: [
+                        <pre><code class="language-javascript">providers: [
   { provide: APP_INITIALIZER, useValue: () =&gt; console.log('Init 1'), multi: true },
   { provide: APP_INITIALIZER, useValue: () =&gt; console.log('Init 2'), multi: true }
 ]
@@ -5275,8 +5202,7 @@ providers: [
                                     provide constants.</p>
                             </div>
                         </div>
-                        <pre><code class="language-javascript">
-export const API_URL = new InjectionToken&lt;string&gt;('api', {
+                        <pre><code class="language-javascript">export const API_URL = new InjectionToken&lt;string&gt;('api', {
   providedIn: 'root',
   factory: () =&gt; 'https://api.example.com'
 });
@@ -5348,8 +5274,7 @@ export const API_URL = new InjectionToken&lt;string&gt;('api', {
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-// app.routes.ts
+                        <pre><code class="language-javascript">// app.routes.ts
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
@@ -5367,8 +5292,7 @@ export const routes: Routes = [
                             Usually, you place this in your <code>AppComponent</code> template, often surrounded by a
                             global header and footer.
                         </p>
-                        <pre><code class="language-html">
-&lt;nav&gt;
+                        <pre><code class="language-html">&lt;nav&gt;
   &lt;a routerLink="/home"&gt;Home&lt;/a&gt;
   &lt;a routerLink="/about"&gt;About&lt;/a&gt;
 &lt;/nav&gt;
@@ -5401,8 +5325,7 @@ export const routes: Routes = [
                             allows you to load parts of your application only when the user navigates to that specific
                             route. This significantly improves the initial load time.
                         </p>
-                        <pre><code class="language-javascript">
-export const routes: Routes = [
+                        <pre><code class="language-javascript">export const routes: Routes = [
   {
     path: 'admin',
     // Component is only downloaded when /admin is visited
@@ -5435,8 +5358,7 @@ export const routes: Routes = [
                                 layouts (like a sidebar and a main view changing independently).
                             </li>
                         </ul>
-                        <pre><code class="language-html">
-&lt;header&gt;My Application&lt;/header&gt;
+                        <pre><code class="language-html">&lt;header&gt;My Application&lt;/header&gt;
 
 &lt;main&gt;
   &lt;router-outlet&gt;&lt;/router-outlet&gt;
@@ -5479,8 +5401,7 @@ export const routes: Routes = [
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-html">
-&lt;nav&gt;
+                        <pre><code class="language-html">&lt;nav&gt;
   &lt;a routerLink="/dashboard"&gt;Dashboard&lt;/a&gt;
 
   &lt;a [routerLink]="['/profile', user.id]"&gt;My Profile&lt;/a&gt;
@@ -5521,8 +5442,7 @@ export const routes: Routes = [
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-html">
-&lt;a routerLink="/home" 
+                        <pre><code class="language-html">&lt;a routerLink="/home" 
    routerLinkActive="active-nav" 
    [routerLinkActiveOptions]="{ exact: true }"&gt;
    Home
@@ -5533,8 +5453,7 @@ export const routes: Routes = [
                             click). In these cases, you inject the <code>Router</code> service and use its
                             <code>Maps()</code> or <code>MapsByUrl()</code> methods.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component, inject } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({ ... })
@@ -5614,8 +5533,7 @@ export class LoginComponent {
                             following the colon is the key you will use to retrieve the value later.
                         </p>
                         <p class="h6">Route Definition:</p>
-                        <pre><code class="language-javascript">
-export const routes: Routes = [
+                        <pre><code class="language-javascript">export const routes: Routes = [
   { path: 'user/:userId', component: UserProfileComponent }
 ];
 </code></pre>
@@ -5636,8 +5554,7 @@ export const routes: Routes = [
                                 <code>withComponentInputBinding()</code>.
                             </li>
                         </ul>
-                        <pre><code class="language-javascript">
-// app.config.ts
+                        <pre><code class="language-javascript">// app.config.ts
 provideRouter(routes, withComponentInputBinding())
 
 // user-profile.component.ts
@@ -5649,8 +5566,7 @@ export class UserProfileComponent {
                         <p class="h5">Method B: ActivatedRoute Service</p>
                         <p>If you need to react to parameter changes without re-instantiating the component (or if you
                             are on an older version), use the <code>ActivatedRoute</code> service.</p>
-                        <pre><code class="language-javascript">
-import { Component, inject, OnInit, signal } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 export class UserProfileComponent implements OnInit {
@@ -5702,8 +5618,7 @@ export class UserProfileComponent implements OnInit {
                             </table>
                         </div>
                         <p class="h6">Navigation Example:</p>
-                        <pre><code class="language-html">
-&lt;a [routerLink]="['/search']" [queryParams]="{ sort: 'price', order: 'asc' }"&gt;
+                        <pre><code class="language-html">&lt;a [routerLink]="['/search']" [queryParams]="{ sort: 'price', order: 'asc' }"&gt;
   Sort by Price
 &lt;/a&gt;
 </code></pre>
@@ -5805,8 +5720,7 @@ export class UserProfileComponent implements OnInit {
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-// app.routes.ts
+                        <pre><code class="language-javascript">// app.routes.ts
 export const routes: Routes = [
   {
     path: 'settings',
@@ -5824,8 +5738,7 @@ export const routes: Routes = [
                             above) must contain its own <code>&lt;router-outlet&gt;</code>. This tells the router
                             exactly where to place the child components.
                         </p>
-                        <pre><code class="language-html">
-&lt;div class="settings-layout"&gt;
+                        <pre><code class="language-html">&lt;div class="settings-layout"&gt;
   &lt;aside class="sidebar"&gt;
     &lt;a routerLink="profile"&gt;Edit Profile&lt;/a&gt;
     &lt;a routerLink="security"&gt;Security Settings&lt;/a&gt;
@@ -5880,8 +5793,7 @@ export const routes: Routes = [
                                 <code>this.route.parent?.snapshot.paramMap</code>.
                             </li>
                         </ol>
-                        <pre><code class="language-javascript">
-// Accessing parent ID from a child component
+                        <pre><code class="language-javascript">// Accessing parent ID from a child component
 const userId = inject(ActivatedRoute).parent?.snapshot.paramMap.get('id');
 </code></pre>
                         <p class="h5">Comparison: Components vs. Child Routes</p>
@@ -5985,8 +5897,7 @@ const userId = inject(ActivatedRoute).parent?.snapshot.paramMap.get('id');
                             route definition with <code>loadComponent</code>. This property takes a function that
                             returns a Promise containing the component.
                         </p>
-                        <pre><code class="language-javascript">
-// app.routes.ts
+                        <pre><code class="language-javascript">// app.routes.ts
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -6011,8 +5922,7 @@ export const routes: Routes = [
                         <p>If you have a large feature with multiple sub-routes (like an Admin section), you can lazy
                             load the entire set of child routes at once using <code>loadChildren</code>.
                         </p>
-                        <pre><code class="language-javascript">
-// admin.routes.ts
+                        <pre><code class="language-javascript">// admin.routes.ts
 export const ADMIN_ROUTES: Routes = [
   { path: '', component: AdminShellComponent },
   { path: 'users', component: AdminUsersComponent },
@@ -6041,8 +5951,7 @@ export const ADMIN_ROUTES: Routes = [
                             clicks.
                         </p>
                         <p>You enable this in your <code>app.config.ts</code>:</p>
-                        <pre><code class="language-javascript">
-import { provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
+                        <pre><code class="language-javascript">import { provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -6105,8 +6014,7 @@ export const appConfig: ApplicationConfig = {
                             <code>false</code> to block it, or a <code>UrlTree</code> to redirect the user elsewhere
                             (e.g., to the login page).
                         </p>
-                        <pre><code class="language-javascript">
-import { inject } from '@angular/core';
+                        <pre><code class="language-javascript">import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
 import { AuthService } from './auth.service';
 
@@ -6123,15 +6031,13 @@ export const authGuard: CanActivateFn = (route, state) =&gt; {
 };
 </code></pre>
                         <p class="h5">Applying the guard in <code>app.routes.ts:</code></p>
-                        <pre><code class="language-javascript">
-{ path: 'admin', component: AdminComponent, canActivate: [authGuard] }
+                        <pre><code class="language-javascript">{ path: 'admin', component: AdminComponent, canActivate: [authGuard] }
 </code></pre>
                         <p class="h5">2. The <code>canDeactivate</code> Guard</p>
                         <p>This guard is unique because it has access to the component instance currently being
                             displayed. This allows you to check the internal state of the component (like a dirty form)
                             before the user leaves. </p>
-                        <pre><code class="language-javascript">
-import { CanDeactivateFn } from '@angular/router';
+                        <pre><code class="language-javascript">import { CanDeactivateFn } from '@angular/router';
 
 export interface CanComponentDeactivate {
   hasUnsavedChanges: () =&gt; boolean;
@@ -6259,8 +6165,7 @@ export const pendingChangesGuard: CanDeactivateFn&lt;CanComponentDeactivate&gt; 
                         <p>To use Reactive Forms, you must import <code>ReactiveFormsModule</code> into your component's
                             <code>imports</code> array.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component, OnInit } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -6292,8 +6197,7 @@ export class UserFormComponent {
                             <code>new FormControl</code> becomes verbose. The <code>FormBuilder</code> service provides
                             a syntactic sugar that makes form definition more concise.
                         </p>
-                        <pre><code class="language-javascript">
-import { inject } from '@angular/core';
+                        <pre><code class="language-javascript">import { inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 export class ProfileComponent {
@@ -6418,8 +6322,7 @@ export class ProfileComponent {
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-// Initializing a standalone control
+                        <pre><code class="language-javascript">// Initializing a standalone control
 const username = new FormControl('Guest', Validators.required);
 
 console.log(username.value); // 'Guest'
@@ -6430,8 +6333,7 @@ username.setValue('Admin');   // Updates value and triggers validation
                             status is determined by its children: if any single control is invalid, the entire group is
                             marked as invalid.
                         </p>
-                        <pre><code class="language-javascript">
-userForm = new FormGroup({
+                        <pre><code class="language-javascript">userForm = new FormGroup({
   firstName: new FormControl(''),
   lastName: new FormControl('')
 });
@@ -6439,8 +6341,7 @@ userForm = new FormGroup({
                         <p>In your HTML, you bind the group using <code>[formGroup]</code> and the individual controls
                             using <code>formControlName</code>.
                         </p>
-                        <pre><code class="language-html">
-&lt;div [formGroup]="userForm"&gt;
+                        <pre><code class="language-html">&lt;div [formGroup]="userForm"&gt;
   &lt;input formControlName="firstName"&gt;
   &lt;input formControlName="lastName"&gt;
 &lt;/div&gt;
@@ -6479,8 +6380,7 @@ userForm = new FormGroup({
                             </div>
                         </div>
                         <p class="h6">Example of Nested Logic:</p>
-                        <pre><code class="language-javascript">
-this.profileForm = new FormGroup({
+                        <pre><code class="language-javascript">this.profileForm = new FormGroup({
   id: new FormControl(1),
   contact: new FormGroup({
     email: new FormControl('', Validators.email),
@@ -6524,8 +6424,7 @@ this.profileForm = new FormGroup({
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-// ❌ Error: Missing 'lastName'
+                        <pre><code class="language-javascript">// ❌ Error: Missing 'lastName'
 this.userForm.setValue({ firstName: 'Jane' }); 
 
 // ✅ Success: Only updates 'firstName'
@@ -6596,8 +6495,7 @@ this.userForm.patchValue({ firstName: 'Jane' });
                         <p class="h5">Implementing a Dynamic List</p>
                         <p>To create a <code>FormArray</code>, you typically define it within a <code>FormGroup</code>.
                             In the template, you iterate through the array's controls using a loop.</p>
-                        <pre><code class="language-javascript">
-import { Component, inject } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, inject } from '@angular/core';
 import { FormBuilder, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
@@ -6643,8 +6541,7 @@ export class HobbyFormComponent {
                         <p>For more complex scenarios, you might need an array where each item is a group of fields
                             (e.g., an array of "Addresses" where each address has a street, city, and zip).</p>
                         <p class="h6">Code Structure:</p>
-                        <pre><code class="language-javascript">
-this.orderForm = this.fb.group({
+                        <pre><code class="language-javascript">this.orderForm = this.fb.group({
   items: this.fb.array([
     this.fb.group({
       productName: ['', Validators.required],
@@ -6654,8 +6551,7 @@ this.orderForm = this.fb.group({
 });
 </code></pre>
                         <p class="h6">Template Binding:</p>
-                        <pre><code class="language-html">
-&lt;div formArrayName="items"&gt;
+                        <pre><code class="language-html">&lt;div formArrayName="items"&gt;
   &lt;div *ngFor="let item of items.controls; let i=index" [formGroupName]="i"&gt;
     &lt;input formControlName="productName"&gt;
     &lt;input formControlName="quantity" type="number"&gt;
@@ -6776,15 +6672,13 @@ this.orderForm = this.fb.group({
                             </table>
                         </div>
                         <p class="h6">Usage Example:</p>
-                        <pre><code class="language-javascript">
-username = new FormControl('', [Validators.required, Validators.minLength(3)]);
+                        <pre><code class="language-javascript">username = new FormControl('', [Validators.required, Validators.minLength(3)]);
 </code></pre>
                         <p class="h5">2. Displaying Validation Errors</p>
                         <p>In the template, you can check the status of a control to show conditional error messages. It
                             is a best practice to wait until the user has interacted with the field
                             (<code>touched</code>) before showing errors to avoid a "sea of red" on a fresh form.</p>
-                        <pre><code class="language-html">
-&lt;input formControlName="email"&gt;
+                        <pre><code class="language-html">&lt;input formControlName="email"&gt;
 @if (userForm.get('email')?.invalid &amp;&amp; userForm.get('email')?.touched) {
   &lt;div class="error"&gt;
     @if (userForm.get('email')?.errors?.['required']) { &lt;span&gt;Email is required.&lt;/span&gt; }
@@ -6796,8 +6690,7 @@ username = new FormControl('', [Validators.required, Validators.minLength(3)]);
                         <p>When built-in validators aren't enough (e.g., checking if a username is "Admin"), you can
                             write your own. A custom validator is simply a function that returns an error object if the
                             check fails.</p>
-                        <pre><code class="language-javascript">
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+                        <pre><code class="language-javascript">import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null =&gt; {
@@ -6811,8 +6704,7 @@ export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
                         <p>Sometimes validation depends on the values of two different fields (e.g., "Password" and
                             "Confirm Password" must match). For this, you apply the validator to the FormGroup rather
                             than an individual control.</p>
-                        <pre><code class="language-javascript">
-const registrationForm = new FormGroup({
+                        <pre><code class="language-javascript">const registrationForm = new FormGroup({
   password: new FormControl(''),
   confirmPassword: new FormControl('')
 }, { validators: passwordMatchValidator });
@@ -6834,8 +6726,7 @@ function passwordMatchValidator(group: AbstractControl): ValidationErrors | null
                                 <code>PENDING</code>.
                             </li>
                         </ul>
-                        <pre><code class="language-javascript">
-email = new FormControl('', {
+                        <pre><code class="language-javascript">email = new FormControl('', {
   validators: [Validators.required],
   asyncValidators: [this.emailLookupService.validateUniqueEmail()],
   updateOn: 'blur' // Optimization: only run on blur, not every keystroke
@@ -6908,8 +6799,7 @@ email = new FormControl('', {
                         <p class="h5">Basic Implementation</p>
                         <p>To use Template-Driven forms, you must import <code>FormsModule</code> into your component.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -7061,8 +6951,7 @@ export class LoginFormComponent {
                             application configuration (<code>app.config.ts</code>) using the
                             <code>provideHttpClient()</code> function.
                         </p>
-                        <pre><code class="language-javascript">
-// app.config.ts
+                        <pre><code class="language-javascript">// app.config.ts
 import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
@@ -7074,8 +6963,7 @@ export const appConfig: ApplicationConfig = {
                         <p class="h5">2. Basic Usage in a Service</p>
                         <p>Data fetching logic should always reside in a Service, not the component. The service injects
                             the <code>HttpClient</code> and returns an Observable to the consumer.</p>
-                        <pre><code class="language-javascript">
-import { Injectable, inject } from '@angular/core';
+                        <pre><code class="language-javascript">import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -7137,8 +7025,7 @@ export class PostService {
                         </div>
                         <p class="h5">4. Consuming HTTP Data in a Component</p>
                         <p>To get data into your UI, you must subscribe to the Observable returned by the service.</p>
-                        <pre><code class="language-javascript">
-@Component({ ... })
+                        <pre><code class="language-javascript">@Component({ ... })
 export class PostListComponent implements OnInit {
   private postService = inject(PostService);
   posts: Post[] = [];
@@ -7192,8 +7079,7 @@ export class PostListComponent implements OnInit {
                         <p>The <code>get()</code> method is used to fetch resources. It is idempotent, meaning multiple
                             identical requests should have the same effect as a single request (fetching the same data).
                         </p>
-                        <pre><code class="language-javascript">
-// Define an interface for type safety
+                        <pre><code class="language-javascript">// Define an interface for type safety
 export interface User {
   id: number;
   name: string;
@@ -7203,7 +7089,7 @@ getUsers(): Observable&lt;User[]&gt; {
   // Specifying &lt;User[]&gt; ensures 'next' emits an array of Users
   return this.http.get&lt;User[]&gt;(`${this.apiUrl}/users`);
 }
-                        </code></pre>
+</code></pre>
                         <p class="h5">2. POST: Creating Data</p>
                         <p>The <code>post()</code> method sends a data payload (the "body") to the server to create a
                             new resource.</p>
@@ -7211,11 +7097,10 @@ getUsers(): Observable&lt;User[]&gt; {
                             <li>Body: Usually a JavaScript object which Angular automatically stringifies to JSON.</li>
                             <li>Response: Usually returns the newly created object, often including an assigned ID.</li>
                         </ul>
-                        <pre><code class="language-javascript">
-createUser(newUser: Partial&lt;User&gt;): Observable&lt;User&gt; {
+                        <pre><code class="language-javascript">createUser(newUser: Partial&lt;User&gt;): Observable&lt;User&gt; {
   return this.http.post&lt;User&gt;(`${this.apiUrl}/users`, newUser);
 }
-                       </code></pre>
+</code></pre>
                         <p class="h5">3. PUT vs. PATCH: Updating Data</p>
                         <p>Both methods are used to update existing resources, but they represent different intentions.
                         </p>
@@ -7242,8 +7127,7 @@ createUser(newUser: Partial&lt;User&gt;): Observable&lt;User&gt; {
                                 </tbody>
                             </table>
                         </div>
-                        <pre><code class="language-javascript">
-// PUT: Replace the whole user object
+                        <pre><code class="language-javascript">// PUT: Replace the whole user object
 updateUser(user: User): Observable&lt;User&gt; {
   return this.http.put&lt;User&gt;(`${this.apiUrl}/users/${user.id}`, user);
 }
@@ -7256,8 +7140,7 @@ updateEmail(id: number, email: string): Observable&lt;User&gt; {
                         <p class="h5">4. DELETE: Removing Data</p>
                         <p>The <code>delete()</code> method removes a resource. It typically does not require a body,
                             only the identifier in the URL.</p>
-                        <pre><code class="language-javascript">
-deleteUser(id: number): Observable&lt;void&gt; {
+                        <pre><code class="language-javascript">deleteUser(id: number): Observable&lt;void&gt; {
   return this.http.delete&lt;void&gt;(`${this.apiUrl}/users/${id}`);
 }
 </code></pre>
@@ -7265,8 +7148,7 @@ deleteUser(id: number): Observable&lt;void&gt; {
                         <p>Every HTTP method accepts an optional <code>Options</code> object as its last argument. This
                             is used to add Headers, Query Parameters, or change the Response Type.</p>
                         <p class="h6">Adding Headers and Params</p>
-                        <pre><code class="language-javascript">
-import { HttpHeaders, HttpParams } from '@angular/common/http';
+                        <pre><code class="language-javascript">import { HttpHeaders, HttpParams } from '@angular/common/http';
 
 getFilteredUsers(role: string) {
   const myHeaders = new HttpHeaders().set('Authorization', 'Bearer token123');
@@ -7358,8 +7240,7 @@ getFilteredUsers(role: string) {
                             request if you wish to change it.
                         </p>
                         <p class="h6">Adding an Auth Header</p>
-                        <pre><code class="language-javascript">
-import { HttpInterceptorFn } from '@angular/common/http';
+                        <pre><code class="language-javascript">import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) =&gt; {
   const authToken = 'MY_CONFIDENTIAL_TOKEN'; // Usually retrieved from a service
@@ -7380,8 +7261,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) =&gt; {
                             <code>catchError</code> operator. This prevents your services from becoming cluttered with
                             repetitive <code>try/catch</code> logic.
                         </p>
-                        <pre><code class="language-javascript">
-import { HttpInterceptorFn } from '@angular/common/http';
+                        <pre><code class="language-javascript">import { HttpInterceptorFn } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) =&gt; {
@@ -7425,8 +7305,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) =&gt; {
                             </table>
                         </div>
                         <p class="h6">Example:</p>
-                        <pre><code class="language-javascript">
-export const appConfig: ApplicationConfig = {
+                        <pre><code class="language-javascript">export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(
       withInterceptors([authInterceptor, errorInterceptor])
@@ -7537,8 +7416,7 @@ export const appConfig: ApplicationConfig = {
                         <p class="h5">1. Enabling SSR & Hydration</p>
                         <p>In modern Angular (v17+), you can enable SSR during project creation or add it later. To
                             enable hydration, you add <code>provideClientHydration()</code> to your providers.</p>
-                        <pre><code class="language-javascript">
-// app.config.ts
+                        <pre><code class="language-javascript">// app.config.ts
 import { provideClientHydration } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
@@ -7589,8 +7467,7 @@ export const appConfig: ApplicationConfig = {
                             </table>
                         </div>
                         <p class="h6">Example of Platform Checking:</p>
-                        <pre><code class="language-javascript">
-import { PLATFORM_ID, inject } from '@angular/core';
+                        <pre><code class="language-javascript">import { PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 export class MyComponent {
@@ -7687,8 +7564,7 @@ export class MyComponent {
                             <code>ng add @angular/ssr</code>, SSG is available by default. To trigger it during the
                             build, you use:
                         </p>
-                        <pre><code class="language-bash">
-ng build
+                        <pre><code class="language-bash">ng build
 </code></pre>
                         <p>This will produce a <code>browser</code> folder containing static assets and a
                             <code>server</code> folder for the rendering engine. If a route doesn't have dynamic
@@ -7699,16 +7575,14 @@ ng build
                             prerender these, you must provide a list of paths in a text file or via a script.
                         </p>
                         <p class="h6">Example <code>routes.txt:</code></p>
-                        <pre><code class="language-javascript ">
-/home
+                        <pre><code class="language-javascript ">/home
 /about
 /product/1
 /product/2
 /product/42
    </code></pre>
                         <p>You then tell the Angular CLI to use this file:</p>
-                        <pre><code class="language-javascript">
-ng build --prerender --routes-file routes.txt
+                        <pre><code class="language-javascript">ng build --prerender --routes-file routes.txt
 </code></pre>
                         <p class="h5">3. Pros and Cons of SSG</p>
                         <div class="table-responsive">
@@ -7838,8 +7712,7 @@ ng build --prerender --routes-file routes.txt
                             <li>Error: A failure occurred. The stream stops immediately.</li>
                             <li>Complete: The stream has finished successfully. No more values will arrive.</li>
                         </ul>
-                        <pre><code class="language-javascript">
-import { Observable } from 'rxjs';
+                        <pre><code class="language-javascript">import { Observable } from 'rxjs';
 
 const myObservable = new Observable(subscriber =&gt; {
   subscriber.next('Hello');
@@ -7908,8 +7781,7 @@ myObservable.subscribe({
                                 recent value upon subscribing. This is the standard for State Management.
                             </li>
                         </ul>
-                        <pre><code class="language-javascript">
-import { BehaviorSubject } from 'rxjs';
+                        <pre><code class="language-javascript">import { BehaviorSubject } from 'rxjs';
 
 // Initial value is 'Initial State'
 const state$ = new BehaviorSubject&lt;string&gt;('Initial State');
@@ -7960,8 +7832,7 @@ state$.next('New State');
                         <p class="h5">1. Configuration (Setup)</p>
                         <p>To use animations, you must provide the animation engine to your application configuration.
                             This enables the browser to listen for animation triggers in your templates.</p>
-                        <pre><code class="language-javascript">
-// app.config.ts
+                        <pre><code class="language-javascript">// app.config.ts
 import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
@@ -8011,8 +7882,7 @@ export const appConfig: ApplicationConfig = {
                         <p class="h5">3. Creating a Basic Animation</p>
                         <p>In this example, we create a "fade-in/out" effect that toggles based on a boolean property.
                         </p>
-                        <pre><code class="language-javascript">
-import { trigger, state, style, animate, transition } from '@angular/animations';
+                        <pre><code class="language-javascript">import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-fade',
@@ -8047,8 +7917,7 @@ export class FadeComponent {
                             <li><code>:leave</code>: Alias for <code>* => void</code> (from any state to "nothing").
                             </li>
                         </ul>
-                        <pre><code class="language-javascript">
-trigger('listAnimation', [
+                        <pre><code class="language-javascript">trigger('listAnimation', [
   transition(':enter', [
     style({ opacity: 0, transform: 'translateY(-10px)' }),
     animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
@@ -8153,8 +8022,7 @@ trigger('listAnimation', [
                             </table>
                         </div>
                         <p class="h6">Example:</p>
-                        <pre><code class="language-javascript">
-&lt;h1 i18n="site header|Welcome message for the homepage@@welcomeHeader"&gt;
+                        <pre><code class="language-javascript">&lt;h1 i18n="site header|Welcome message for the homepage@@welcomeHeader"&gt;
   Welcome to our store!
 &lt;/h1&gt;
 </code></pre>
@@ -8166,14 +8034,12 @@ trigger('listAnimation', [
                         <p>To translate an attribute like <code>title</code> or <code>placeholder</code>, use the syntax
                             <code>i18n-attributeName</code>.
                         </p>
-                        <pre><code class="language-html">
-&lt;img src="logo.png" i18n-alt alt="Company Logo"&gt;
+                        <pre><code class="language-html">&lt;img src="logo.png" i18n-alt alt="Company Logo"&gt;
 </code></pre>
                         <p class="h6">Pluralization and Selection</p>
                         <p>ICU expressions handle different grammatical rules for numbers (Plural) or genders/categories
                             (Select).</p>
-                        <pre><code class="language-html">
-&lt;span i18n&gt;
+                        <pre><code class="language-html">&lt;span i18n&gt;
   {itemCount, plural, =0 {no items} =1 {one item} other {{itemCount} items}}
 &lt;/span&gt;
 
@@ -8195,8 +8061,7 @@ trigger('listAnimation', [
                             <li>Build: Configure your <code>angular.json</code> to build specific locales.
                             </li>
                         </ol>
-                        <pre><code class="language-javascript">
-// angular.json snippet
+                        <pre><code class="language-javascript">// angular.json snippet
 "i18n": {
   "sourceLocale": "en-US",
   "locales": {
@@ -8334,8 +8199,7 @@ trigger('listAnimation', [
                         <p class="h5">1. Generating a Web Worker in Angular</p>
                         <p>The Angular CLI makes setting up Web Workers straightforward. You can generate one for a
                             specific component using the following command:</p>
-                        <pre><code class="language-bash">
-ng generate web-worker app
+                        <pre><code class="language-bash">ng generate web-worker app
 </code></pre>
                         <p>This command does three things:</p>
                         <ul>
@@ -8346,8 +8210,7 @@ ng generate web-worker app
                         <p class="h5">2. Implementation: The Worker Script</p>
                         <p>The worker lives in its own file. It cannot access the DOM or Angular services directly.
                             Communication happens via a Messaging System.</p>
-                        <pre><code class="language-javascript">
-/// &lt;reference lib="webworker" /&gt;
+                        <pre><code class="language-javascript">/// &lt;reference lib="webworker" /&gt;
 
 // app.worker.ts
 addEventListener('message', ({ data }) =&gt; {
@@ -8365,8 +8228,7 @@ function performHeavyCalculation(data: any) {
 </code></pre>
                         <p class="h5">3. Using the Worker in a Component</p>
                         <p>In your TypeScript component, you instantiate the worker and listen for messages.</p>
-                        <pre><code class="language-javascript">
-if (typeof Worker !== 'undefined') {
+                        <pre><code class="language-javascript">if (typeof Worker !== 'undefined') {
   // Create a new web worker
   const worker = new Worker(new URL('./app.worker', import.meta.url));
 
@@ -8399,8 +8261,7 @@ if (typeof Worker !== 'undefined') {
                         <p>If you are passing massive amounts of data (like an <code>ArrayBuffer</code>), use
                             Transferable Objects. This "transfers" the memory from the main thread to the worker without
                             copying it, making the process nearly instantaneous.</p>
-                        <pre><code class="language-javascript">
-// Transferring ownership of an ArrayBuffer
+                        <pre><code class="language-javascript">// Transferring ownership of an ArrayBuffer
 worker.postMessage(largeBuffer, [largeBuffer]);
 </code></pre>
                         <div class="callout-block callout-block-info">
@@ -8464,16 +8325,14 @@ worker.postMessage(largeBuffer, [largeBuffer]);
                         <p class="h5">1. Setup and Installation</p>
                         <p>To get started, you need to add the <code>@angular/elements</code> package to your project.
                             This package provides the <code>createCustomElement</code> API.</p>
-                        <pre><code class="language-bash">
-ng add @angular/elements
+                        <pre><code class="language-bash">ng add @angular/elements
 </code></pre>
                         <p class="h5">2. Converting a Component</p>
                         <p>To transform a standard Standalone Component into a Custom Element, you use the
                             <code>createCustomElement</code> function and define it using the browser's native
                             <code>customElements.define</code> API.
                         </p>
-                        <pre><code class="language-javascript">
-import { createCustomElement } from '@angular/elements';
+                        <pre><code class="language-javascript">import { createCustomElement } from '@angular/elements';
 import { Injector, createComponent } from '@angular/core';
 import { MyButtonComponent } from './my-button.component';
 
@@ -8489,8 +8348,7 @@ customElements.define('my-button-element', myElement);
                         <p class="h5">3. Using the Element Anywhere</p>
                         <p>Once registered, you use the component just like a native HTML tag. The browser handles the
                             lifecycle, and Angular handles the internal logic.</p>
-                        <pre><code class="language-html">
-&lt;my-button-element label="Click Me" (action)="handleEvent($event)"&gt;&lt;/my-button-element&gt;
+                        <pre><code class="language-html">&lt;my-button-element label="Click Me" (action)="handleEvent($event)"&gt;&lt;/my-button-element&gt;
 
 &lt;script&gt;
   const el = document.querySelector('my-button-element');
@@ -8633,8 +8491,7 @@ customElements.define('my-button-element', myElement);
                             or dynamic CSS from a trusted source. For these cases, Angular provides the
                             <code>DomSanitizer</code> service.
                         </p>
-                        <pre><code class="language-javascript">
-import { Component, inject } from '@angular/core';
+                        <pre><code class="language-javascript">import { Component, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
@@ -8776,8 +8633,7 @@ export class SecureVideoComponent {
                         <p>Every Angular file (component, service, pipe) usually comes with a corresponding
                             <code>.spec.ts</code> file.
                         </p>
-                        <pre><code class="language-javascript">
-// sample.spec.ts
+                        <pre><code class="language-javascript">// sample.spec.ts
 describe('AuthService', () =&gt; { // 1. The Test Suite
   let service: AuthService;
 
@@ -8897,8 +8753,7 @@ describe('AuthService', () =&gt; { // 1. The Test Suite
                         <p class="h5">2. Basic Component Test Structure</p>
                         <p>When you generate a component, Angular creates a <code>.spec.ts</code> boilerplate. Here is
                             how you use it to test a simple "Welcome" message.</p>
-                        <pre><code class="language-javascript">
-describe('WelcomeComponent', () =&gt; {
+                        <pre><code class="language-javascript">describe('WelcomeComponent', () =&gt; {
   let component: WelcomeComponent;
   let fixture: ComponentFixture&lt;WelcomeComponent&gt;;
 
@@ -8964,8 +8819,7 @@ describe('WelcomeComponent', () =&gt; {
                         <p class="h5">4. Handling Dependencies (Mocks & Spies)</p>
                         <p>Components often rely on services. In a test, you should never use the real service
                             (especially if it makes HTTP calls). Instead, you use Spies or Mock Services.</p>
-                        <pre><code class="language-javascript">
-// Mocking a service in TestBed
+                        <pre><code class="language-javascript">// Mocking a service in TestBed
 const mockAuthService = { isLoggedIn: () =&gt; true };
 
 beforeEach(() =&gt; {
@@ -9016,8 +8870,7 @@ beforeEach(() =&gt; {
                             <code>TestBed</code> for basic pipe testing; you can simply instantiate the class.
                         </p>
                         <p class="h6">Example: Testing a "TitleCase" Pipe</p>
-                        <pre><code class="language-javascript">
-import { TitleCasePipe } from './title-case.pipe';
+                        <pre><code class="language-javascript">import { TitleCasePipe } from './title-case.pipe';
 
 describe('TitleCasePipe', () =&gt; {
   const pipe = new TitleCasePipe();
@@ -9030,7 +8883,7 @@ describe('TitleCasePipe', () =&gt; {
     expect(pipe.transform('')).toBe('');
   });
 });
-    </code></pre>
+</code></pre>
                         <p class="h5">2. Testing Services</p>
                         <p>Services often have dependencies (like <code>HttpClient</code>). When testing a service, we
                             use <code>TestBed.inject()</code> to get an instance of the service within the testing
@@ -9066,8 +8919,7 @@ describe('TitleCasePipe', () =&gt; {
                             were called.
                         </p>
                         <p class="h6">Example: Testing a Data Fetching Service</p>
-                        <pre><code class="language-javascript">
-import { TestBed } from '@angular/core/testing';
+                        <pre><code class="language-javascript">import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { DataService } from './data.service';
 
@@ -9109,8 +8961,7 @@ describe('DataService', () =&gt; {
                         <p>If your service depends on another service (e.g., a <code>LoggerService</code>), use a
                             Jasmine Spy. This allows you to check if a method was called without executing the actual
                             code of the dependency.</p>
-                        <pre><code class="language-javascript">
-it('should log a message when data is saved', () =&gt; {
+                        <pre><code class="language-javascript">it('should log a message when data is saved', () =&gt; {
   const loggerSpy = jasmine.createSpyObj('LoggerService', ['log']);
   const service = new DataService(loggerSpy);
 
@@ -9240,8 +9091,7 @@ it('should log a message when data is saved', () =&gt; {
                         <p>E2E tests use a "Selector-Action-Assertion" pattern. You find an element, interact with it,
                             and check the result.</p>
                         <p class="h6">Example: A Login Flow (Playwright Syntax)</p>
-                        <pre><code class="language-javascript">
-import { test, expect } from '@playwright/test';
+                        <pre><code class="language-javascript">import { test, expect } from '@playwright/test';
 
 test('should log in successfully with valid credentials', async ({ page }) =&gt; {
   // 1. Visit the page
@@ -9529,8 +9379,7 @@ test('should log in successfully with valid credentials', async ({ page }) =&gt;
                         <p>The <code>angular.json</code> file contains a <code>configurations</code> object. By default,
                             Angular defines a <code>production</code> configuration that enables these optimizations.
                         </p>
-                        <pre><code class="language-javascript">
-"configurations": {
+                        <pre><code class="language-javascript">"configurations": {
   "production": {
     "optimization": true,
     "outputHashing": "all",
@@ -9559,8 +9408,7 @@ test('should log in successfully with valid credentials', async ({ page }) =&gt;
                             <li>Edit <code>environment.prod.ts</code> for production.</li>
                         </ol>
                         <p class="h6">Usage in Code:</p>
-                        <pre><code class="language-javascript">
-import { environment } from '../environments/environment';
+                        <pre><code class="language-javascript">import { environment } from '../environments/environment';
 
 export class ApiService {
   apiUrl = environment.apiUrl; // Automatically swaps based on build target
@@ -9604,6 +9452,7 @@ export class ApiService {
                             your environment files. Even if minified, any code sent to the browser can be easily read by
                             a determined user.</p>
                     </section>
+                    
                     <section class="docs-section" id="item-11-3">
                         <p class="h3">Deployment</p>
                         <p>Deployment is the final stage of the development lifecycle, where your compiled application
@@ -9700,8 +9549,7 @@ export class ApiService {
                         <p>The Solution: You must configure your server to redirect all requests to
                             <code>index.html</code>.</p>
                         <p class="h6">Nginx Configuration Example:</p>
-                        <pre><code class="language-nginx">
-location / {
+                        <pre><code class="language-nginx">location / {
     try_files $uri $uri/ /index.html;
 }
 </code></pre>
